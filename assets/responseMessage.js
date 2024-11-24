@@ -1,0 +1,17 @@
+module.exports = {
+    USER_REGISTERD: 'You have successfully registered.',
+    USER_NOT_FOUND: 'User not found.',
+    OTP_SEND: 'OTP send on your mobile successfully.',
+    EMAIL_EXIST: "Email already exist",
+    MOBILE_EXIST: 'Mobile number already exist',
+    EMAIL_MOBILE_EXIST: "Email or mobile number already exist",
+    USER_NOT_FOUND: 'User not found',
+    OTP_EXPIRED: 'Otp expired',
+    INVALID_OTP: 'Invalid Otp',
+    OTP_VERIFIED: 'Otp verified successfully',
+    INCORRECT_PASSWORD: 'Password is incorrect',
+    MOBILE_NOT_VERIFIED: 'Please verify your mobile first',
+    USER_LOGGED: 'User logged In successfully',
+    PASSWORD_NOT_MATCH: 'Password and confirm password are not same',
+    PASSWORD_CHANGED: 'Password changed successfully!',
+}

@@ -1,0 +1,21 @@
+{
+  "development": {
+    "config_id": "development",
+    "port": 5009,
+    "hostAddress": "localhost",
+    "databaseHost": "0.0.0.0",
+    "databasePort": "27017",
+    "databaseName": "travel_chapes",
+    "dbCredential": {
+      "host": "",
+      "user": "",
+      "password": "",
+      "dbName": ""
+    },
+    "jwtsecret": "nodejwt",
+    "jwtresetsecret": "nodejwt",
+    "jwtOptions": {
+      "expiresIn": "24h"
+    }
+  }
+}
