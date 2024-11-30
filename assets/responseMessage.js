@@ -14,4 +14,6 @@ module.exports = {
     USER_LOGGED: 'User logged In successfully',
     PASSWORD_NOT_MATCH: 'Password and confirm password are not same',
     PASSWORD_CHANGED: 'Password changed successfully!',
+    DATA_NOT_FOUND: 'Data not found.',
+    DATA_FOUND: 'Data found successfully'
 }

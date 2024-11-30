@@ -7,7 +7,7 @@ const { userServices } = require("../../services/user");
 const { createUser, findUser, updateUser } = userServices;
 const commonFunction = require("../../../../helper/utlis");
 const userType = require("../../../../enums/userType");
-const { sendMail } = require("../../../../helper/mailer");
+const { sendMobileOtp } = require("../../../../helper/mobileSms");
 
 class userController {
   async signup(req, res, next) {
@@ -51,7 +51,7 @@ class userController {
 
       await createUser(newUser);
 
-      await sendOtp(value.mobileNumber, otp);
+      await sendMobileOtp(value.mobileNumber, otp);
       return res.json(new response({}, responseMessage.USER_REGISTERD));
     } catch (error) {
       next(error);
@@ -103,7 +103,7 @@ class userController {
         isMobileVerified: value.mobileNumber ? false : userResult.isMobileVerified
       }
       await updateUser({ _id: userResult._id }, updateFields);
-      await sendSms(userResult.mobileNumber, otp);  // Send OTP via SMS (assuming you have this utility)
+      await sendMobileOtp(userResult.mobileNumber, otp);  // Send OTP via SMS (assuming you have this utility)
       return res.json(new response({}, responseMessage.OTP_SEND));
     } catch (error) {
       next(error);
