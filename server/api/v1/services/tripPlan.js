@@ -8,6 +8,9 @@ const tripPlanServices = {
     findTripPlans: async (query) => {
         return await tripPlanModel.findOne(query);
     },
+    updateTripPlans: async (query, updatedObj) => {
+        return await tripPlanModel.update(query, updatedObj, { new: true });
+    },
     findAlltripPlans: async (validateBody) => {
         let query = { status: { $eq: status.active } }
         let { page, limit } = validateBody;
