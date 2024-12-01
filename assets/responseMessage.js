@@ -15,5 +15,10 @@ module.exports = {
     PASSWORD_NOT_MATCH: 'Password and confirm password are not same',
     PASSWORD_CHANGED: 'Password changed successfully!',
     DATA_NOT_FOUND: 'Data not found.',
-    DATA_FOUND: 'Data found successfully'
+    DATA_FOUND: 'Data found successfully',
+    ADMIN_NOT_FOUND:"Admin not found.",
+    ADMIN_LOGGEDIN:"Admin successfully logged In",
+    TRIP_PLAN_CREATED:"Trip plan created successfully.",
+    TRIP_PLAN_NOT_FOUND:"Trip plan not found.",
+    TRIP_PLAN_UPDATED:"Trip plan updated successfully."
 }

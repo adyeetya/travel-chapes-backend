@@ -14,7 +14,12 @@ module.exports = {
         return Math.floor(100000 + Math.random() * 90000);
     },
     getToken: (payload) => {
-        return jwt.sign(payload, global.gConfig.jwtsecret, { expiresIn: '24h', });
+        return jwt.sign(payload, global.gConfig.jwtsecret, { expiresIn: '30d', });
     },
 
 }
+// const passwordHashing =  (password) => {
+//     return bcrypt.hashSync(password, saltRounds);
+// }
+// console.log(passwordHashing("admin@12"));
+ 

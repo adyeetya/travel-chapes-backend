@@ -15,7 +15,57 @@
     "jwtsecret": "nodejwt",
     "jwtresetsecret": "nodejwt",
     "jwtOptions": {
-      "expiresIn": "24h"
+      "expiresIn": "30d"
+    },
+    "nodemailer": {
+      "USER": "",
+      "PASS": ""
+    }
+  },
+  "staging": {
+    "config_id": "development",
+    "port": 5009,
+    "hostAddress": "localhost",
+    "databaseHost": "0.0.0.0",
+    "databasePort": "27017",
+    "databaseName": "travel_chapes",
+    "dbCredential": {
+      "host": "cluster0.8p16f.mongodb.net",
+      "user": "2612adityasingh2000",
+      "password": "kkhxx3RNuvX3dVhD",
+      "dbName": "travel-chapes"
+    },
+    "jwtsecret": "nodejwt",
+    "jwtresetsecret": "nodejwt",
+    "jwtOptions": {
+      "expiresIn": "30d"
+    },
+    "nodemailer": {
+      "USER": "",
+      "PASS": ""
+    }
+  },
+  "production": {
+    "config_id": "development",
+    "port": 5009,
+    "hostAddress": "localhost",
+    "databaseHost": "0.0.0.0",
+    "databasePort": "27017",
+    "databaseName": "travel_chapes",
+    "dbCredential": {
+      "host": "cluster0.8p16f.mongodb.net",
+      "user": "2612adityasingh2000",
+      "password": "kkhxx3RNuvX3dVhD",
+      "dbName": "travel-chapes"
+    },
+    "jwtsecret": "nodejwt",
+    "jwtresetsecret": "nodejwt",
+    "jwtOptions": {
+      "expiresIn": "30d"
+    },
+    "nodemailer": {
+      "USER": "",
+      "PASS": ""
     }
   }
 }
