@@ -42,7 +42,7 @@ class tripPlansController {
             title: Joi.string().optional(),
             route: Joi.string().required(),
             duration: Joi.string().required(),
-            category: Joi.string().optional(),
+            category: Joi.array().optional(),
             ageGroup: Joi.string().optional(),
             minPrice: Joi.string().required(),
             batch: Joi.array().items(
@@ -122,7 +122,7 @@ class tripPlansController {
             title: Joi.string().optional(),
             route: Joi.string().optional(),
             duration: Joi.string().optional(),
-            category: Joi.string().optional(),
+            category: Joi.array().optional(),
             ageGroup: Joi.string().optional(),
             minPrice: Joi.string().optional(),
             batch: Joi.array().items(
@@ -211,7 +211,7 @@ class tripPlansController {
     }
     async getAllTripPlans(req, res, next) {
         try {
-            const validatedBody = req.query;
+            const validatedBody = req.body;
             const tripPlans = await findAlltripPlans(validatedBody);
             return res.json(new response(tripPlans, responseMessage.DATA_FOUND));
         } catch (err) {
