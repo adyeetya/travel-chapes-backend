@@ -10,7 +10,7 @@ const tripPlanSchema = new mongoose.Schema({
     title: { type: String },
     route: { type: String },
     duration: { type: String },
-    category: { type: String },
+    category: { type: Array },
     ageGroup: { type: String },
     minPrice: { type: String },
     batch: [
@@ -79,7 +79,7 @@ const tripPlanData = {
     title: 'Chopta Tungnath Trek',
     route: 'Delhi To Delhi',
     duration: '3D & 2N',
-    category: 'Weekend Gateway',
+    category: ['Weekend Gateway','New Listing'],
     ageGroup: '18-35',
     minPrice: '8000/-',
     batch: [
