@@ -173,7 +173,7 @@ class userController {
         userType: userResult.userType
       });
 
-      await updateUser({ _id: userResult._id }, { isEmailVerified: true });
+      await updateUser({ _id: userResult._id }, { isMobileVerified: true });
 
       const result = {
         name: userResult.name,

@@ -1,224 +1,247 @@
-import Joi from "joi";
-import apiError from "../../../../helper/apiError";
-import response from "../../../../../assets/response";
-import responseMessage from "../../../../../assets/responseMessage"
-import status from "../../../../enums/status";
-import { userServices } from "../../services/user";
-import { tripPlanServices } from "../../services/tripPlan";
-import { adminServices } from "../../services/admin";
+import Joi from 'joi'
+import apiError from '../../../../helper/apiError'
+import response from '../../../../../assets/response'
+import responseMessage from '../../../../../assets/responseMessage'
+import status from '../../../../enums/status'
+import { userServices } from '../../services/user'
+import { tripPlanServices } from '../../services/tripPlan'
+import { adminServices } from '../../services/admin'
 const { findAdmin } = adminServices
-const { findUser } = userServices;
-const { createTripPlans, findAlltripPlans, findTripPlans } = tripPlanServices;
+const { findUser } = userServices
+const { createTripPlans, findAlltripPlans, findTripPlans } = tripPlanServices
 
 class tripPlansController {
-    async findAlltripPlans(req, res, next) {
-        const validSchema = Joi.object({
-            page: Joi.number().optional(),
-            limit: Joi.number().optional(),
-        })
-        try {
-            const { error, value } = validSchema.validate(req.body);
-            if (error) {
-                throw apiError.badRequest(error.details[0].message);
-            }
-            const userResult = await findUser({ _id: req.userId });
-            if (!userResult) {
-                throw apiError.notFound(responseMessage.USER_NOT_FOUND);
-            }
-            const result = await findAlltripPlans(value);
-            if (result.docs.length == 0) {
-                throw apiError.notFound(responseMessage.DATA_NOT_FOUND)
-            }
-            return res.json(new response(result, responseMessage.DATA_FOUND))
-        } catch (error) {
-            next(error);
-        }
+  // user
+  async findAlltripPlans(req, res, next) {
+    const validSchema = Joi.object({
+      page: Joi.number().optional(),
+      limit: Joi.number().optional(),
+    })
+    try {
+      const { error, value } = validSchema.validate(req.body)
+      if (error) {
+        throw apiError.badRequest(error.details[0].message)
+      }
+      const userResult = await findUser({ _id: req.userId })
+      if (!userResult) {
+        throw apiError.notFound(responseMessage.USER_NOT_FOUND)
+      }
+      const result = await findAlltripPlans(value)
+      if (result.docs.length == 0) {
+        throw apiError.notFound(responseMessage.DATA_NOT_FOUND)
+      }
+      return res.json(new response(result, responseMessage.DATA_FOUND))
+    } catch (error) {
+      next(error)
     }
+  }
 
-
-    async createTripPlans(req, res, next) {
-        const validSchema = Joi.object({
-            name: Joi.string().required(),
-            title: Joi.string().optional(),
-            route: Joi.string().required(),
-            duration: Joi.string().required(),
-            category: Joi.string().optional(),
-            ageGroup: Joi.string().optional(),
-            minPrice: Joi.string().required(),
-            batch: Joi.array().items(
-                Joi.object({
-                    date: Joi.string().required(),
-                    transports: Joi.array().items(
-                        Joi.object({
-                            type: Joi.string().required(),
-                            costTripleSharing: Joi.string().optional(),
-                            costDoubleSharing: Joi.string().optional(),
-                        })
-                    ),
-                })
-            ).optional(),
-            banners: Joi.object({
-                phone: Joi.string().optional(),
-                web: Joi.string().optional(),
-            }).optional(),
-            images: Joi.array().items(Joi.string()).optional(),
-            metaTitle: Joi.string().optional(),
-            metaDescription: Joi.string().optional(),
-            headline: Joi.string().optional(),
+  async createTripPlans(req, res, next) {
+    const validSchema = Joi.object({
+      name: Joi.string().required(),
+      title: Joi.string().optional(),
+route: Joi.string().required(),
+      duration: Joi.string().required(),
+      category: Joi.string().optional(),
+      ageGroup: Joi.string().optional(),
+      minPrice: Joi.string().required(),
+      batch: Joi.array()
+        .items(
+          Joi.object({
+            date: Joi.string().required(),
+            transports: Joi.array().items(
+              Joi.object({
+                type: Joi.string().required(),
+                costTripleSharing: Joi.string().optional(),
+                costDoubleSharing: Joi.string().optional(),
+              })
+            ),
+          })
+        )
+        .optional(),
+      banners: Joi.object({
+        phone: Joi.string().optional(),
+        web: Joi.string().optional(),
+      }).optional(),
+      images: Joi.array().items(Joi.string()).optional(),
+      metaTitle: Joi.string().optional(),
+      metaDescription: Joi.string().optional(),
+      headline: Joi.string().optional(),
+      description: Joi.string().optional(),
+      shortItinerary: Joi.array()
+        .items(
+          Joi.object({
+            day: Joi.string().required(),
             description: Joi.string().optional(),
-            shortItinerary: Joi.array().items(
-                Joi.object({
-                    day: Joi.string().required(),
-                    description: Joi.string().optional(),
-                })
-            ).optional(),
-            fullItinerary: Joi.array().items(
-                Joi.object({
-                    day: Joi.string().required(),
-                    title: Joi.string().optional(),
-                    description: Joi.string().optional(),
-                })
-            ).optional(),
-            inclusions: Joi.array().items(
-                Joi.object({
-                    title: Joi.string().required(),
-                    description: Joi.string().optional(),
-                })
-            ).optional(),
-            exclusions: Joi.array().items(
-                Joi.object({
-                    title: Joi.string().required(),
-                    description: Joi.string().optional(),
-                })
-            ).optional(),
-            importantPoints: Joi.array().items(
-                Joi.object({
-                    title: Joi.string().required(),
-                    description: Joi.string().optional(),
-                })
-            ).optional(),
-        });
-        
-        try {
-            const { error, value } = validSchema.validate(req.body);
-            if (error) {
-                return next(apiError.badRequest(error.details[0].message)); // Use `next` directly
-            }
-            const adminResult = await findAdmin({ where: { _id: req.userId } });
-            if (!adminResult) {
-                return next(apiError.notFound(responseMessage.ADMIN_NOT_FOUND));
-            }
-
-            await createTripPlans(value);
-            return res.json(new response({}, responseMessage.TRIP_PLAN_CREATED));
-        } catch (err) {
-            next(err); 
-        }
-    }
-    async updateTripPlan(req, res, next) {
-        const updateSchema = Joi.object({
-            _id: Joi.string().required(),
-            name: Joi.string().optional(),
+          })
+        )
+        .optional(),
+      fullItinerary: Joi.array()
+        .items(
+          Joi.object({
+            day: Joi.string().required(),
             title: Joi.string().optional(),
-            route: Joi.string().optional(),
-            duration: Joi.string().optional(),
-            category: Joi.string().optional(),
-            ageGroup: Joi.string().optional(),
-            minPrice: Joi.string().optional(),
-            batch: Joi.array().items(
-                Joi.object({
-                    date: Joi.string().optional(),
-                    transports: Joi.array().items(
-                        Joi.object({
-                            type: Joi.string().optional(),
-                            costTripleSharing: Joi.string().optional(),
-                            costDoubleSharing: Joi.string().optional(),
-                        })
-                    ),
-                })
-            ).optional(),
-            banners: Joi.object({
-                phone: Joi.string().optional(),
-                web: Joi.string().optional(),
-            }).optional(),
-            images: Joi.array().items(Joi.string()).optional(),
-            metaTitle: Joi.string().optional(),
-            metaDescription: Joi.string().optional(),
-            headline: Joi.string().optional(),
             description: Joi.string().optional(),
-            shortItinerary: Joi.array().items(
-                Joi.object({
-                    day: Joi.string().optional(),
-                    description: Joi.string().optional(),
-                })
-            ).optional(),
-            fullItinerary: Joi.array().items(
-                Joi.object({
-                    day: Joi.string().optional(),
-                    title: Joi.string().optional(),
-                    description: Joi.string().optional(),
-                })
-            ).optional(),
-            inclusions: Joi.array().items(
-                Joi.object({
-                    title: Joi.string().optional(),
-                    description: Joi.string().optional(),
-                })
-            ).optional(),
-            exclusions: Joi.array().items(
-                Joi.object({
-                    title: Joi.string().optional(),
-                    description: Joi.string().optional(),
-                })
-            ).optional(),
-            importantPoints: Joi.array().items(
-                Joi.object({
-                    title: Joi.string().optional(),
-                    description: Joi.string().optional(),
-                })
-            ).optional(),
-            status: Joi.string().valid('active', 'delete').optional(),
-        });
-    
-        try {
-            const { error, value } = updateSchema.validate(req.body);
-            if (error) {
-                return next(apiError.badRequest(error.details[0].message));
-            }
-    
-            const tripPlan = await findTripPlans({ where: { _id: value._id  } });
-            if (!tripPlan) {
-                return next(apiError.notFound(responseMessage.TRIP_PLAN_NOT_FOUND));
-            }
-    
-            await updateTripPlanById(tripPlanId, value);
-            return res.json(new response({}, responseMessage.TRIP_PLAN_UPDATED));
-        } catch (err) {
-            next(err);
-        }
+          })
+        )
+        .optional(),
+      inclusions: Joi.array()
+        .items(
+          Joi.object({
+            title: Joi.string().required(),
+            description: Joi.string().optional(),
+          })
+        )
+        .optional(),
+      exclusions: Joi.array()
+        .items(
+          Joi.object({
+            title: Joi.string().required(),
+            description: Joi.string().optional(),
+          })
+        )
+        .optional(),
+      importantPoints: Joi.array()
+        .items(
+          Joi.object({
+            title: Joi.string().required(),
+            description: Joi.string().optional(),
+          })
+        )
+        .optional(),
+    })
+
+    try {
+      const { error, value } = validSchema.validate(req.body)
+      if (error) {
+        return next(apiError.badRequest(error.details[0].message)) // Use `next` directly
+      }
+      const adminResult = await findAdmin({ where: { _id: req.userId } })
+      if (!adminResult) {
+        return next(apiError.notFound(responseMessage.ADMIN_NOT_FOUND))
+      }
+
+      await createTripPlans(value)
+      return res.json(new response({}, responseMessage.TRIP_PLAN_CREATED))
+    } catch (err) {
+      next(err)
     }
-    async viewTripPlan(req, res, next) {
-        try {
-            const tripPlanId = req.query._id;
-            const tripPlan = await findTripPlans({ where: { _id: tripPlanId } });
-            if (!tripPlan) {
-                return next(apiError.notFound(responseMessage.TRIP_PLAN_NOT_FOUND));
-            }
-            return res.json(new response(tripPlan, responseMessage.DATA_FOUND));
-        } catch (err) {
-            next(err);
-        }
+  }
+  async updateTripPlan(req, res, next) {
+    const updateSchema = Joi.object({
+      _id: Joi.string().required(),
+      name: Joi.string().optional(),
+      title: Joi.string().optional(),
+      route: Joi.string().optional(),
+      duration: Joi.string().optional(),
+      category: Joi.string().optional(),
+      ageGroup: Joi.string().optional(),
+      minPrice: Joi.string().optional(),
+      batch: Joi.array()
+        .items(
+          Joi.object({
+            date: Joi.string().optional(),
+            transports: Joi.array().items(
+              Joi.object({
+                type: Joi.string().optional(),
+                costTripleSharing: Joi.string().optional(),
+                costDoubleSharing: Joi.string().optional(),
+              })
+            ),
+          })
+        )
+        .optional(),
+      banners: Joi.object({
+        phone: Joi.string().optional(),
+        web: Joi.string().optional(),
+      }).optional(),
+      images: Joi.array().items(Joi.string()).optional(),
+      metaTitle: Joi.string().optional(),
+      metaDescription: Joi.string().optional(),
+      headline: Joi.string().optional(),
+      description: Joi.string().optional(),
+      shortItinerary: Joi.array()
+        .items(
+          Joi.object({
+            day: Joi.string().optional(),
+            description: Joi.string().optional(),
+          })
+        )
+        .optional(),
+      fullItinerary: Joi.array()
+        .items(
+          Joi.object({
+            day: Joi.string().optional(),
+            title: Joi.string().optional(),
+            description: Joi.string().optional(),
+          })
+        )
+        .optional(),
+      inclusions: Joi.array()
+        .items(
+          Joi.object({
+            title: Joi.string().optional(),
+            description: Joi.string().optional(),
+          })
+        )
+        .optional(),
+      exclusions: Joi.array()
+        .items(
+          Joi.object({
+            title: Joi.string().optional(),
+            description: Joi.string().optional(),
+          })
+        )
+        .optional(),
+      importantPoints: Joi.array()
+        .items(
+          Joi.object({
+            title: Joi.string().optional(),
+            description: Joi.string().optional(),
+          })
+        )
+        .optional(),
+      status: Joi.string().valid('active', 'delete').optional(),
+    })
+
+    try {
+      const { error, value } = updateSchema.validate(req.body)
+      if (error) {
+        return next(apiError.badRequest(error.details[0].message))
+      }
+
+      const tripPlan = await findTripPlans({ where: { _id: value._id } })
+      if (!tripPlan) {
+        return next(apiError.notFound(responseMessage.TRIP_PLAN_NOT_FOUND))
+      }
+
+      await updateTripPlanById(tripPlanId, value)
+      return res.json(new response({}, responseMessage.TRIP_PLAN_UPDATED))
+    } catch (err) {
+      next(err)
     }
-    async getAllTripPlans(req, res, next) {
-        try {
-            const validatedBody = req.query;
-            const tripPlans = await findAlltripPlans(validatedBody);
-            return res.json(new response(tripPlans, responseMessage.DATA_FOUND));
-        } catch (err) {
-            next(err);
-        }
+  }
+  async viewTripPlan(req, res, next) {
+    try {
+      const tripPlanId = req.query._id
+      const tripPlan = await findTripPlans({ where: { _id: tripPlanId } })
+      if (!tripPlan) {
+        return next(apiError.notFound(responseMessage.TRIP_PLAN_NOT_FOUND))
+      }
+      return res.json(new response(tripPlan, responseMessage.DATA_FOUND))
+    } catch (err) {
+      next(err)
     }
-    
+  }
+  async getAllTripPlans(req, res, next) {
+    try {
+      const validatedBody = req.query
+      const tripPlans = await findAlltripPlans(validatedBody)
+      return res.json(new response(tripPlans, responseMessage.DATA_FOUND))
+    } catch (err) {
+      next(err)
+    }
+  }
 }
 
-export default new tripPlansController();
+export default new tripPlansController()
