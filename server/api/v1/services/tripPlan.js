@@ -13,7 +13,10 @@ const tripPlanServices = {
     },
     findAlltripPlans: async (validateBody) => {
         let query = { status: { $eq: status.active } }
-        let { page, limit } = validateBody;
+        let { page, limit, category } = validateBody;
+        if (category) {
+            query.category = { $in: [category] };
+        }
         let options = {
             page: Number(page) || 1,
             limit: Number(limit) || 4,
