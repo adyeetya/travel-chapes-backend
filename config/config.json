@@ -20,7 +20,8 @@
     "nodemailer": {
       "USER": "",
       "PASS": ""
-    }
+    },
+    "openWeatherKey":"c988414d003c524618ef6dad892ce39f"
   },
   "staging": {
     "config_id": "development",
@@ -43,7 +44,8 @@
     "nodemailer": {
       "USER": "",
       "PASS": ""
-    }
+    },
+    "openWeatherKey":"c988414d003c524618ef6dad892ce39f"
   },
   "production": {
     "config_id": "development",

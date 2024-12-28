@@ -3,6 +3,7 @@ import apiError from "../../../../helper/apiError";
 import response from "../../../../../assets/response";
 import responseMessage from "../../../../../assets/responseMessage"
 import status from "../../../../enums/status";
+import axios from "axios";
 import { userServices } from "../../services/user";
 import { tripPlanServices } from "../../services/tripPlan";
 import { adminServices } from "../../services/admin";
@@ -98,7 +99,7 @@ class tripPlansController {
                 })
             ).optional(),
         });
-        
+
         try {
             const { error, value } = validSchema.validate(req.body);
             if (error) {
@@ -112,7 +113,7 @@ class tripPlansController {
             await createTripPlans(value);
             return res.json(new response({}, responseMessage.TRIP_PLAN_CREATED));
         } catch (err) {
-            next(err); 
+            next(err);
         }
     }
     async updateTripPlan(req, res, next) {
@@ -179,18 +180,18 @@ class tripPlansController {
             ).optional(),
             status: Joi.string().valid('active', 'delete').optional(),
         });
-    
+
         try {
             const { error, value } = updateSchema.validate(req.body);
             if (error) {
                 return next(apiError.badRequest(error.details[0].message));
             }
-    
-            const tripPlan = await findTripPlans({ where: { _id: value._id  } });
+
+            const tripPlan = await findTripPlans({ where: { _id: value._id } });
             if (!tripPlan) {
                 return next(apiError.notFound(responseMessage.TRIP_PLAN_NOT_FOUND));
             }
-    
+
             await updateTripPlanById(tripPlanId, value);
             return res.json(new response({}, responseMessage.TRIP_PLAN_UPDATED));
         } catch (err) {
@@ -218,7 +219,37 @@ class tripPlansController {
             next(err);
         }
     }
-    
+
+    async getWeather(req, res, next) {
+        const validSchema = Joi.object({
+            city: Joi.string().required()
+        })
+        try {
+            const { error, value } = validSchema.validate(req.query);
+            if (error) throw apiError.badRequest(error.details[0].message);
+            const city = req.query.city;
+            const apiKey = global.gConfig.openWeatherKey;
+            const APIUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=imperial&appid=${apiKey}`;
+            try {
+                // console.log(APIUrl);
+                const responseData = await axios.get(APIUrl);
+                let weather = responseData.data;
+                if (!weather) {
+                    throw apiError.internal(responseMessage.SOMETHINGWENT_WRONG);
+                }
+                return res.json(new response(weather, responseMessage.DATA_FOUND))
+            } catch (error) {
+                console.log("error===========>",error);
+                
+                if (error) {
+                    throw apiError.internal(responseMessage.SOMETHINGWENT_WRONG);
+                }
+            }
+        } catch (error) {
+            console.log("error>>>>>>>>>>", error);
+            next(error);
+        }
+    }
 }
 
 export default new tripPlansController();

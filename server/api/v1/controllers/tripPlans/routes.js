@@ -2,6 +2,7 @@ import Express from 'express';
 import controller from "./controller"
 import auth from "../../../../helper/auth";
 module.exports = Express.Router()
+    .get("/getWeather", controller.getWeather)
     .use(auth.verifyToken)
     .get("/tripPlansList", controller.findAlltripPlans)
     .post("/createTripPlans", controller.createTripPlans)

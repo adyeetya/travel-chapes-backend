@@ -13,6 +13,7 @@
   "author": "Shivam Tiwari",
   "license": "MIT",
   "dependencies": {
+    "axios": "^1.7.9",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "babel-register": "^6.26.0",
