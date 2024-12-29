@@ -7,8 +7,10 @@ import axios from "axios";
 import { userServices } from "../../services/user";
 import { tripPlanServices } from "../../services/tripPlan";
 import { adminServices } from "../../services/admin";
+import { tripFormServices } from "../../services/tripForm";
 const { findAdmin } = adminServices
 const { findUser } = userServices;
+const { createTripFrom } = tripFormServices
 const { createTripPlans, findAlltripPlans, findTripPlans } = tripPlanServices;
 
 class tripPlansController {
@@ -239,8 +241,8 @@ class tripPlansController {
                 }
                 return res.json(new response(weather, responseMessage.DATA_FOUND))
             } catch (error) {
-                console.log("error===========>",error);
-                
+                console.log("error===========>", error);
+
                 if (error) {
                     throw apiError.internal(responseMessage.SOMETHINGWENT_WRONG);
                 }
@@ -248,6 +250,26 @@ class tripPlansController {
         } catch (error) {
             console.log("error>>>>>>>>>>", error);
             next(error);
+        }
+    }
+    async submitTripForm(req, res, next) {
+        const validSchema = Joi.object({
+            name: Joi.string().required(),
+            email: Joi.string().required(),
+            phoneNumber: Joi.string().required(),
+            numberOfDays: Joi.number().required(),
+            numberOfTravelers: Joi.number().required(),
+            destination: Joi.string().required()
+        })
+        try {
+            const { error, value } = validSchema.validate(req.body);
+            if (error) {
+                throw apiError.badRequest(error.details[0].message);
+            }
+            await createTripFrom(value);
+            return res.json(new response({}, responseMessage.DATA_SAVED))
+        } catch (error) {
+            next(error)
         }
     }
 }
