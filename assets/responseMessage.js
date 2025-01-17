@@ -20,5 +20,7 @@ module.exports = {
     ADMIN_LOGGEDIN:"Admin successfully logged In",
     TRIP_PLAN_CREATED:"Trip plan created successfully.",
     TRIP_PLAN_NOT_FOUND:"Trip plan not found.",
-    TRIP_PLAN_UPDATED:"Trip plan updated successfully."
+    TRIP_PLAN_UPDATED:"Trip plan updated successfully.",
+    SOMETHINGWENT_WRONG:"Something went wrong please try again later.",
+    DATA_SAVED:"Details saved successfully"
 }

@@ -13,9 +13,18 @@ const tripPlanServices = {
     },
     findAlltripPlans: async (validateBody) => {
         let query = { status: { $eq: status.active } }
-        let { page, limit, category } = validateBody;
+        let { page, limit, category, startDate, endDate } = validateBody;
         if (category) {
             query.category = { $in: [category] };
+        }
+        if (startDate || endDate) {
+            query.createdAt = {};
+            if (startDate) {
+                query.createdAt.$gte = new Date(startDate);
+            }
+            if (endDate) {
+                query.createdAt.$lte = new Date(endDate);
+            }
         }
         let options = {
             page: Number(page) || 1,
