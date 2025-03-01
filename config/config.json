@@ -18,13 +18,13 @@
       "expiresIn": "30d"
     },
     "nodemailer": {
-      "USER": "",
-      "PASS": ""
+      "USER": "tiwarishiv7169@gmail.com",
+      "PASS": "hqei rkvw gmvs wsfq"
     },
-    "openWeatherKey":"c988414d003c524618ef6dad892ce39f"
+    "openWeatherKey": "c988414d003c524618ef6dad892ce39f"
   },
   "staging": {
-    "config_id": "development",
+    "config_id": "staging",
     "port": 5009,
     "hostAddress": "localhost",
     "databaseHost": "0.0.0.0",
@@ -42,13 +42,13 @@
       "expiresIn": "30d"
     },
     "nodemailer": {
-      "USER": "",
-      "PASS": ""
+      "USER": "tiwarishiv7169@gmail.com",
+      "PASS": "hqei rkvw gmvs wsfq"
     },
-    "openWeatherKey":"c988414d003c524618ef6dad892ce39f"
+    "openWeatherKey": "c988414d003c524618ef6dad892ce39f"
   },
   "production": {
-    "config_id": "development",
+    "config_id": "staging",
     "port": 5009,
     "hostAddress": "localhost",
     "databaseHost": "0.0.0.0",
@@ -66,8 +66,8 @@
       "expiresIn": "30d"
     },
     "nodemailer": {
-      "USER": "",
-      "PASS": ""
+      "USER": "tiwarishiv7169@gmail.com",
+      "PASS": "hqei rkvw gmvs wsfq"
     }
   }
 }
