@@ -31,7 +31,7 @@
     },
     "awsS3": {
       "accessKeyId": "AKIA6ODVAFDB2G2VEI3H",
-      "secretAccessKey": "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"
+      "accessKey": "QXi3OborNM9J7JvDkF7juqPtiJhWLL4tdLysYoQc"
     }
   },
   "staging": {
@@ -66,7 +66,7 @@
     },
     "awsS3": {
       "accessKeyId": "AKIA6ODVAFDB2G2VEI3H",
-      "secretAccessKey": "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"
+      "accessKey": "QXi3OborNM9J7JvDkF7juqPtiJhWLL4tdLysYoQc"
     }
   },
   "production": {
@@ -101,7 +101,7 @@
     },
     "awsS3": {
       "accessKeyId": "AKIA6ODVAFDB2G2VEI3H",
-      "secretAccessKey": "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"
+      "accessKey": "QXi3OborNM9J7JvDkF7juqPtiJhWLL4tdLysYoQc"
     }
   }
 }

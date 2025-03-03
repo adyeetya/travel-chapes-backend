@@ -6,7 +6,7 @@ const s3Client = new S3Client({
     endpoint: "https://s3.eu-north-1.amazonaws.com",
     credentials: {
         accessKeyId: global.gConfig.awsS3.accessKeyId,
-        secretAccessKey: global.gConfig.awsS3.secretAccessKey
+        secretAccessKey: global.gConfig.awsS3.accessKey
     }
 });
 
