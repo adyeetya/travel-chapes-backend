@@ -1,13 +1,12 @@
 const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
 const fs = require("fs");
-const path = require("path");
-
+require("../../config/config");
 const s3Client = new S3Client({
     region: "eu-north-1",
     endpoint: "https://s3.eu-north-1.amazonaws.com",
     credentials: {
-        accessKeyId: "AKIA6ODVAFDB2G2VEI3H",
-        secretAccessKey: "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"
+        accessKeyId: global.gConfig.awsS3.accessKeyId,
+        secretAccessKey: global.gConfig.awsS3.secretAccessKey
     }
 });
 

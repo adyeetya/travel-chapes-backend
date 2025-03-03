@@ -28,6 +28,10 @@
       "ENTITY_ID": "1001935047473311510",
       "TEMPLATE_ID": "1007721353040671028",
       "SERVICE_USER_ID": "travelchapes"
+    },
+    "awsS3": {
+      "accessKeyId": "AKIA6ODVAFDB2G2VEI3H",
+      "secretAccessKey": "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"
     }
   },
   "staging": {
@@ -59,6 +63,10 @@
       "ENTITY_ID": "1001935047473311510",
       "TEMPLATE_ID": "1007721353040671028",
       "SERVICE_USER_ID": "travelchapes"
+    },
+    "awsS3": {
+      "accessKeyId": "AKIA6ODVAFDB2G2VEI3H",
+      "secretAccessKey": "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"
     }
   },
   "production": {
@@ -90,6 +98,10 @@
       "ENTITY_ID": "1001935047473311510",
       "TEMPLATE_ID": "1007721353040671028",
       "SERVICE_USER_ID": "travelchapes"
+    },
+    "awsS3": {
+      "accessKeyId": "AKIA6ODVAFDB2G2VEI3H",
+      "secretAccessKey": "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"
     }
   }
 }
