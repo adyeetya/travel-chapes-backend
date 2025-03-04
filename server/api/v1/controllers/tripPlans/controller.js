@@ -26,10 +26,6 @@ class tripPlansController {
             if (error) {
                 throw apiError.badRequest(error.details[0].message)
             }
-            const userResult = await findUser({ _id: req.userId })
-            if (!userResult) {
-                throw apiError.notFound(responseMessage.USER_NOT_FOUND)
-            }
             const result = await findAlltripPlans(value)
             if (result.docs.length == 0) {
                 throw apiError.notFound(responseMessage.DATA_NOT_FOUND)
