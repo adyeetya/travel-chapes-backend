@@ -273,4 +273,6 @@ class tripPlansController {
     }
 }
 
+
 export default new tripPlansController()
+

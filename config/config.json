@@ -18,9 +18,10 @@
       "expiresIn": "30d"
     },
     "nodemailer": {
-      "USER": "",
-      "PASS": ""
+      "USER": "tiwarishiv7169@gmail.com",
+      "PASS": "hqei rkvw gmvs wsfq"
     },
+
     "openWeatherKey": "c988414d003c524618ef6dad892ce39f",
     "smsCredentials": {
       "SMS_API_KEY": "92Z5BNRsJZz",
@@ -33,6 +34,7 @@
       "accessKeyId": "AKIA6ODVAFDB2G2VEI3H",
       "accessKey": "QXi3OborNM9J7JvDkF7juqPtiJhWLL4tdLysYoQc"
     }
+
   },
   "staging": {
     "config_id": "staging",
@@ -53,9 +55,10 @@
       "expiresIn": "30d"
     },
     "nodemailer": {
-      "USER": "",
-      "PASS": ""
+      "USER": "tiwarishiv7169@gmail.com",
+      "PASS": "hqei rkvw gmvs wsfq"
     },
+
     "openWeatherKey": "c988414d003c524618ef6dad892ce39f",
     "smsCredentials": {
       "SMS_API_KEY": "92Z5BNRsJZz",
@@ -71,6 +74,7 @@
   },
   "production": {
     "config_id": "production",
+
     "port": 5009,
     "hostAddress": "localhost",
     "databaseHost": "0.0.0.0",
@@ -88,6 +92,7 @@
       "expiresIn": "30d"
     },
     "nodemailer": {
+
       "USER": "",
       "PASS": ""
     },
@@ -102,6 +107,7 @@
     "awsS3": {
       "accessKeyId": "AKIA6ODVAFDB2G2VEI3H",
       "accessKey": "QXi3OborNM9J7JvDkF7juqPtiJhWLL4tdLysYoQc"
+
     }
   }
 }
