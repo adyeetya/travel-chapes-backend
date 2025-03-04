@@ -21,7 +21,20 @@
       "USER": "tiwarishiv7169@gmail.com",
       "PASS": "hqei rkvw gmvs wsfq"
     },
-    "openWeatherKey": "c988414d003c524618ef6dad892ce39f"
+
+    "openWeatherKey": "c988414d003c524618ef6dad892ce39f",
+    "smsCredentials": {
+      "SMS_API_KEY": "92Z5BNRsJZz",
+      "SENDER_ID": "TRVLCP",
+      "ENTITY_ID": "1001935047473311510",
+      "TEMPLATE_ID": "1007721353040671028",
+      "SERVICE_USER_ID": "travelchapes"
+    },
+    "awsS3": {
+      "accessKeyId": "AKIA6ODVAFDB2G2VEI3H",
+      "accessKey": "QXi3OborNM9J7JvDkF7juqPtiJhWLL4tdLysYoQc"
+    }
+
   },
   "staging": {
     "config_id": "staging",
@@ -45,10 +58,23 @@
       "USER": "tiwarishiv7169@gmail.com",
       "PASS": "hqei rkvw gmvs wsfq"
     },
-    "openWeatherKey": "c988414d003c524618ef6dad892ce39f"
+
+    "openWeatherKey": "c988414d003c524618ef6dad892ce39f",
+    "smsCredentials": {
+      "SMS_API_KEY": "92Z5BNRsJZz",
+      "SENDER_ID": "TRVLCP",
+      "ENTITY_ID": "1001935047473311510",
+      "TEMPLATE_ID": "1007721353040671028",
+      "SERVICE_USER_ID": "travelchapes"
+    },
+    "awsS3": {
+      "accessKeyId": "AKIA6ODVAFDB2G2VEI3H",
+      "accessKey": "QXi3OborNM9J7JvDkF7juqPtiJhWLL4tdLysYoQc"
+    }
   },
   "production": {
-    "config_id": "staging",
+    "config_id": "production",
+
     "port": 5009,
     "hostAddress": "localhost",
     "databaseHost": "0.0.0.0",
@@ -66,8 +92,22 @@
       "expiresIn": "30d"
     },
     "nodemailer": {
-      "USER": "tiwarishiv7169@gmail.com",
-      "PASS": "hqei rkvw gmvs wsfq"
+
+      "USER": "",
+      "PASS": ""
+    },
+    "openWeatherKey": "c988414d003c524618ef6dad892ce39f",
+    "smsCredentials": {
+      "SMS_API_KEY": "92Z5BNRsJZz",
+      "SENDER_ID": "TRVLCP",
+      "ENTITY_ID": "1001935047473311510",
+      "TEMPLATE_ID": "1007721353040671028",
+      "SERVICE_USER_ID": "travelchapes"
+    },
+    "awsS3": {
+      "accessKeyId": "AKIA6ODVAFDB2G2VEI3H",
+      "accessKey": "QXi3OborNM9J7JvDkF7juqPtiJhWLL4tdLysYoQc"
+
     }
   }
 }

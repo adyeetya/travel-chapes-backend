@@ -16,11 +16,12 @@ module.exports = {
     PASSWORD_CHANGED: 'Password changed successfully!',
     DATA_NOT_FOUND: 'Data not found.',
     DATA_FOUND: 'Data found successfully',
-    ADMIN_NOT_FOUND:"Admin not found.",
-    ADMIN_LOGGEDIN:"Admin successfully logged In",
-    TRIP_PLAN_CREATED:"Trip plan created successfully.",
-    TRIP_PLAN_NOT_FOUND:"Trip plan not found.",
-    TRIP_PLAN_UPDATED:"Trip plan updated successfully.",
-    SOMETHINGWENT_WRONG:"Something went wrong please try again later.",
-    DATA_SAVED:"Details saved successfully"
+    ADMIN_NOT_FOUND: "Admin not found.",
+    ADMIN_LOGGEDIN: "Admin successfully logged In",
+    TRIP_PLAN_CREATED: "Trip plan created successfully.",
+    TRIP_PLAN_NOT_FOUND: "Trip plan not found.",
+    TRIP_PLAN_UPDATED: "Trip plan updated successfully.",
+    SOMETHINGWENT_WRONG: "Something went wrong please try again later.",
+    DATA_SAVED: "Details saved successfully",
+    UPLOAD_SUCCESS: "File uploaded successfully"
 }
