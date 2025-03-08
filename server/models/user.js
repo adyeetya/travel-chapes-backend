@@ -8,7 +8,6 @@ const userSchema = new mongoose.Schema(
       mobileNumber: { type: String, required: true, unique: true },
       isMobileVerified: { type: Boolean, default: false },
       isEmailVerified: { type: Boolean, default: false },
-      userStatus: { type: String, default: userType.user, enum: [userType.user, userType.admin] },
       status: { type: String, default: status.active, enum: [status.active, status.delete, status.block] },
       otp: { type: String },
       otpExpiresAt: { type: Date },

@@ -8,7 +8,7 @@ const { createUser, findUser, updateUser } = userServices;
 const commonFunction = require("../../../../helper/utlis");
 const userType = require("../../../../enums/userType");
 const sendMobileOtp = require("../../../../helper/mobileSms");
-import { uploadFileToS3 } from "../../../../helper/aws_uploads";
+import jwt from "jsonwebtoken";
 
 class userController {
   async signup(req, res, next) {
@@ -39,7 +39,6 @@ class userController {
         name: value.name,
         email: value.email,
         mobileNumber: value.mobileNumber,
-        userStatus: userType.user,
         status: status.active,
         otp,
         otpExpiresAt,
@@ -98,7 +97,7 @@ class userController {
       const updateFields = {
         otp: otp,
         otpExpiresAt: otpExpiresAt,
-        isMobileVerified: value.mobileNumber ? false : userResult.isMobileVerified
+        isMobileVerified: true
       }
       await updateUser({ _id: userResult._id }, updateFields);
       await sendMobileOtp(userResult.mobileNumber, otp);  // Send OTP via SMS (assuming you have this utility)
@@ -115,13 +114,10 @@ class userController {
     };
     try {
       const value = await Joi.validate(req.body, validSchema);
-      const userResult = await findUser({ mobileNumber: value.mobileNumber, userType: userType.user, userStatus: userStatus.active });
+      // console.log(value);
+      const userResult = await findUser({ mobileNumber: value.mobileNumber, status: status.active });
       if (!userResult) {
         throw apiError.notFound(responseMessage.USER_NOT_FOUND);
-      }
-      const isPasswordMatch = await commonFunction.compareHash(value.password, userResult.password);
-      if (!isPasswordMatch) {
-        throw apiError.notAllowed(responseMessage.INCORRECT_PASSWORD);
       }
       if (!userResult.isMobileVerified) {
         throw apiError.notAllowed(responseMessage.MOBILE_NOT_VERIFIED);
@@ -129,8 +125,8 @@ class userController {
       const otp = commonFunction.getOtp();
       const otpExpiresAt = new Date(Date.now() + 10 * 60 * 1000); // OTP expires in 10 minutes
       await sendMobileOtp(userResult.mobileNumber, otp);
-      await updateUser({ _id: userResult._id }, { otp: otp, otpExpiresAt: otpExpiresAt, isMobileVerified: false });
-      return res.json(new response(result, responseMessage.OTP_SEND));
+      await updateUser({ _id: userResult._id }, { otp: otp, otpExpiresAt: otpExpiresAt });
+      return res.json(new response({}, responseMessage.OTP_SEND));
     } catch (error) {
       next(error);
     }
@@ -153,7 +149,7 @@ class userController {
       if (value.otp !== userResult.otp) {
         throw apiError.notAllowed(responseMessage.INVALID_OTP);
       }
-      const token = commonFunction.getToken({ userId: userResult._id, mobileNumber: userResult.mobileNumber, userType: userResult.userType });
+      const token = commonFunction.getToken({ userId: userResult._id, mobileNumber: userResult.mobileNumber });
       await updateUser({ _id: userResult._id }, { isMobileVerified: true });
       const result = { name: userResult.name, email: userResult.email, mobileNumber: userResult.mobileNumber, token: token };
       return res.json(new response(result, responseMessage.USER_LOGGED));
@@ -161,22 +157,31 @@ class userController {
       next(error);
     }
   }
-  async uploadFilesOnS3(req, res, next) {
+
+
+  async validateToken(req, res, next) {
     try {
-      // console.log(req);
-      
-      const file = req.files;
-      // console.log(file);
-      const buketName = 'travelchapes';
-      const key = req.body.keyId;
-      const result = await uploadFileToS3(file[0].path, buketName, key,file[0].filename);
-      if (!result) {
-        throw apiError.internal(responseMessage.SOMETHINGWENT_WRONG);
+      if (!req.headers.token) {
+        return res.status(400).send({ responseCode: 400, responseMessage: 'Token required. Please provide a token.' });
       }
-      return res.json(new response(result, responseMessage.UPLOAD_SUCCESS));
+      jwt.verify(req.headers.token, global.gConfig.jwtsecret, async (err, result) => {
+        if (err) {
+          return res.status(401).send({ responseCode: 401, responseMessage: 'Unauthorized' });
+        }
+
+        const userResult = await findUser({ _id: result.userId, status: { $eq: status.active } });
+        if (!userResult) {
+          return res.status(404).send({ responseCode: 404, responseMessage: 'User not found' });
+        }
+        const obj = {
+          name: userResult.name,
+          mobileNumber: userResult.mobileNumber,
+          email: userResult.email
+        }
+        return res.json(new response(obj, responseMessage.DATA_FOUND));
+      });
     } catch (error) {
-      console.log(error);
-      next(error);
+      next(error)
     }
   }
 }

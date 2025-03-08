@@ -7,7 +7,8 @@ const { adminServices } = require("../../services/admin");
 const { findAdmin, updateAdmin } = adminServices;
 const commonFunction = require("../../../../helper/utlis");
 const userType = require("../../../../enums/userType");
-const {loginEmailOTP} = require("../../../../helper/mailer");
+const { loginEmailOTP } = require("../../../../helper/mailer");
+import { uploadFileToS3 } from "../../../../helper/aws_uploads";
 class adminController {
     async loginOtp(req, res, next) {
         const validationSchema = {
@@ -83,6 +84,24 @@ class adminController {
         catch (error) {
             console.log("errof form login===>>", error);
             return next(error);
+        }
+    }
+    async uploadFilesOnS3(req, res, next) {
+        try {
+            // console.log(req);
+
+            const file = req.files;
+            // console.log(file);
+            const buketName = 'travelchapes';
+            const key = req.body.keyId;
+            const result = await uploadFileToS3(file[0].path, buketName, key, file[0].filename);
+            if (!result) {
+                throw apiError.internal(responseMessage.SOMETHINGWENT_WRONG);
+            }
+            return res.json(new response(result, responseMessage.UPLOAD_SUCCESS));
+        } catch (error) {
+            console.log(error);
+            next(error);
         }
     }
 }
