@@ -27,7 +27,8 @@ class adminController {
                 throw apiError.invalid(responseMessage.INCORRECT_PASSWORD);
             }
             const otp = commonFunction.getOtp();
-            loginEmailOTP(email, 'Login OTP', otp);
+            console.log('otp sent - ',otp)
+            // loginEmailOTP(email, 'Login OTP', otp);
             await updateAdmin({ _id: adminResult._id }, { otp: otp, otpTime: new Date(new Date().setMinutes(new Date().getMinutes() + 3)), isEmailVerified: false });
             return res.json(new response({}, responseMessage.OTP_SEND));
         } catch (error) {
@@ -69,17 +70,24 @@ class adminController {
             if (!adminResult) {
                 throw apiError.notFound(responseMessage.ADMIN_NOT_FOUND);
             }
-
+// console.log('admin result ---', adminResult)
             if (Number(adminResult.otp) === Number(otp)) {
                 if (new Date(adminResult.otpTime).toISOString() < new Date().toISOString()) {
+                    console.log('otp matched')
                     throw apiError.notAllowed(responseMessage.OTP_EXPIRED);
                 }
                 await updateAdmin({ _id: adminResult._id }, { otp: null, isEmailVerified: true });
+                console.log('admin updated');
+                
             } else {
                 throw apiError.notAllowed(responseMessage.INVALID_OTP);
             }
             let token = await commonFunction.getToken({ userId: adminResult._id, email: adminResult.email, adminType: adminResult.adminType });
+            
+            console.log('token sent', token);
             return res.json(new response({ token }, responseMessage.ADMIN_LOGGEDIN))
+            
+            
         }
         catch (error) {
             console.log("errof form login===>>", error);

@@ -14,6 +14,7 @@ const adminSchema = new mongoose.Schema({
 );
 
 const admin = mongoose.model('admin', adminSchema);
+
 async function defaultAdmin() {
     try {
         const adminResult = await admin.findOne({ adminType: userType.admin, status: status.active });
@@ -22,9 +23,10 @@ async function defaultAdmin() {
             return;
         }
         await admin.create({
-            email:"shvam12@yopmail.com",
-            hashedPassword:"$2b$10$2.6OU/AkKiHlwlUtN6z7Fu.ArMA6x5IaoW/76uhseNsMVjUbUc0zG"
+            email:"2612adityasingh2000@gmail.com",
+            hashedPassword:"$2b$10$iDyJH/ogzpqwLjSVMUzclu8K/.k9DBvxY3Ad4BOMUlArjGCIBDwiG"
         })
+        console.log("New Default admin created!💪")
 
     } catch (error) {
         console.log(error)
