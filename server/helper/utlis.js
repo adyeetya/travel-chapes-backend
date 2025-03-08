@@ -1,11 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
-const config = require("../../config/config.json");
+require("../../config/config")
 const saltRounds = 10;
-
-console.log('config.jwtsecret', config.jwtsecret)
-const jwtSec = 'qwerty123'
-
 module.exports = {
     createHash: (password) => {
         return bcrypt.hashSync(password, saltRounds);
@@ -17,9 +13,7 @@ module.exports = {
         return Math.floor(100000 + Math.random() * 90000);
     },
     getToken: (payload) => {
-        console.log('payload', payload)
-        console.log('config.jwtsecret', config.jwtsecret)
-        return jwt.sign(payload, jwtSec, { expiresIn: '30d' });
+        return jwt.sign(payload, global.gConfig.jwtsecret, { expiresIn: '30d' });
     },
 };
 
