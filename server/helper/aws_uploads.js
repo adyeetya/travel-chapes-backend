@@ -1,9 +1,10 @@
 const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
 const fs = require("fs");
 require("../../config/config");
+
+const REGION = global.gConfig.awsS3.region || "eu-north-1"; // Ensure region is set
 const s3Client = new S3Client({
-    region: "eu-north-1",
-    endpoint: "https://s3.eu-north-1.amazonaws.com",
+    region: REGION,
     credentials: {
         accessKeyId: global.gConfig.awsS3.accessKeyId,
         secretAccessKey: global.gConfig.awsS3.accessKey
@@ -15,7 +16,6 @@ async function uploadFileToS3(filePath, bucketName, folderName, fileName) {
         const fileContent = fs.readFileSync(filePath);
         folderName = folderName.replace(/^\/+|\/+$/g, "");
         const keyName = `${folderName}/${fileName}`;
-        console.log(keyName);
 
         const params = {
             Bucket: bucketName,
@@ -30,11 +30,12 @@ async function uploadFileToS3(filePath, bucketName, folderName, fileName) {
         return {
             success: true,
             message: "File uploaded successfully",
-            url: `https://${bucketName}.s3.${s3Client.config.region}.amazonaws.com/${keyName}`
+            url: `https://${bucketName}.s3.${REGION}.amazonaws.com/${keyName}`
         };
     } catch (error) {
+        console.error("S3 Upload Error:", error);
         throw error;
     }
 }
 
-module.exports = { uploadFileToS3 }
+module.exports = { uploadFileToS3 };
