@@ -77,7 +77,7 @@ const Planner = mongoose.model('tripPlan', tripPlanSchema);
 
 
 const tripPlanData = {
-    slug:'chopta-tungnath'
+    slug:'chopta-tungnath',
     name: 'Chopta',
     title: 'Chopta Tungnath Trek',
     route: 'Delhi To Delhi',
