@@ -8,6 +8,9 @@ const { createUser, findUser, updateUser } = userServices;
 const commonFunction = require("../../../../helper/utlis");
 const userType = require("../../../../enums/userType");
 const sendMobileOtp = require("../../../../helper/mobileSms");
+import { sendEmailUserQuery } from "../../../../helper/mailer";
+import { userQueryServices } from "../../services/userQuery";
+const { createQuery } = userQueryServices;
 import jwt from "jsonwebtoken";
 
 class userController {
@@ -182,6 +185,24 @@ class userController {
       });
     } catch (error) {
       next(error)
+    }
+  }
+  async postQuery(req, res, next) {
+    const validSchema = Joi.object({
+      name: Joi.string().required(),
+      email: Joi.string().required(),
+      query: Joi.string().required(),
+    })
+    try {
+      const { error, value } = await validSchema.validate(req.body);
+      if (error) {
+        throw apiError.badRequest(error.details[0].message);
+      }
+      await sendEmailUserQuery("tiwarishiv7169@gmail.com", "User Query Request", value.email, value.name, value.query);
+      await createQuery(value);
+      return res.json(new response({}, responseMessage.QUERY_SAVED))
+    } catch (error) {
+      next(error);
     }
   }
 }

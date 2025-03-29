@@ -43,6 +43,7 @@ class tripPlansController {
         const validSchema = Joi.object({
             name: Joi.string().required(),
             title: Joi.string().optional(),
+            city: Joi.string().required(),
             route: Joi.string().required(),
             duration: Joi.string().required(),
             category: Joi.array().optional(),
@@ -123,6 +124,7 @@ class tripPlansController {
             _id: Joi.string().required(),
             name: Joi.string().optional(),
             title: Joi.string().optional(),
+            city: Joi.string().required(),
             route: Joi.string().optional(),
             duration: Joi.string().optional(),
             category: Joi.array().optional(),

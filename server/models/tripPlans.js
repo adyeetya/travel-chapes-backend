@@ -8,6 +8,7 @@ const options = {
 const tripPlanSchema = new mongoose.Schema({
     id: { type: String, required: true },
     name: { type: String, required: true },
+    city: { type: String, required: true },
     title: { type: String },
     route: { type: String },
     duration: { type: String },
@@ -76,12 +77,12 @@ const Planner = mongoose.model('tripPlan', tripPlanSchema);
 
 
 const tripPlanData = {
-    id:'chopta-tungnath',
+    id: 'chopta-tungnath',
     name: 'Chopta',
     title: 'Chopta Tungnath Trek',
     route: 'Delhi To Delhi',
     duration: '3D & 2N',
-    category: ['Weekend Gateway','New Listing'],
+    category: ['Weekend Gateway', 'New Listing'],
     ageGroup: '18-35',
     minPrice: '8000/-',
     batch: [
@@ -167,7 +168,7 @@ const tripPlanData = {
         },
         {
             day: 'Day 2',
-            title:'Trek From Chopta to Tungnath Temple and Chandrashila (4 km; 4 hrs)',
+            title: 'Trek From Chopta to Tungnath Temple and Chandrashila (4 km; 4 hrs)',
             description: `- Early Morning Start: Begin your walk from Chopta to Chandrashila Hill.
       - Visit Tungnath Temple: Pass by the world's highest Shiva temple at 12,106 ft.
       - Scenic Mountain Tops: Climb to Chandrashila and witness panoramic views of peaks like Nanda Devi, Trisul, Kedar Peak, Bandarpunch, and Chaukhamba.
@@ -176,7 +177,7 @@ const tripPlanData = {
         },
         {
             day: 'Day 3',
-            title:'Deoria Tal and Departure Day: A Glimpse of What Makes Your Journey Special',
+            title: 'Deoria Tal and Departure Day: A Glimpse of What Makes Your Journey Special',
             description: ` - Morning at Chopta: Start your day with a hearty breakfast.
       - Travel to Sari Village: Begin your trek from Sari to Deoria Tal.
       - Trek to Deoria Tal: A scenic hike to the lake, known for its reflections of the Chaukhamba peaks. Perfect spot for photos and rest.
@@ -185,7 +186,7 @@ const tripPlanData = {
         },
         {
             day: 'Day 4',
-            title:'Delhi Arrival: End of the Trip – Farewell to an Unforgettable Adventure',
+            title: 'Delhi Arrival: End of the Trip – Farewell to an Unforgettable Adventure',
             description: `- Early Morning Arrival in Delhi, marking the end of your fantastic journey.
     - Say farewell to fellow trekkers and cherish the unforgettable experiences.
   `,
@@ -200,62 +201,62 @@ const tripPlanData = {
         },
         {
             title: 'Sightseeing',
-            description:'All-inclusive sightseeing in the area with your assigned Tempo Traveler. Relax and enjoy the picturesque landscapes and scenic attractions at your convenience.',
+            description: 'All-inclusive sightseeing in the area with your assigned Tempo Traveler. Relax and enjoy the picturesque landscapes and scenic attractions at your convenience.',
         },
         {
             title: 'Accommodation',
-            description:'Enjoy a 2-night cozy stay in Swiss Camps nestled in Chopta, offering a perfect blend of comfort and nature.',
+            description: 'Enjoy a 2-night cozy stay in Swiss Camps nestled in Chopta, offering a perfect blend of comfort and nature.',
         },
         {
             title: 'Guidance',
-            description:'Your Trip Captain and local guide will accompany you throughout the journey, ensuring a safe and memorable experience.',
+            description: 'Your Trip Captain and local guide will accompany you throughout the journey, ensuring a safe and memorable experience.',
         },
         {
             title: 'Meals Included',
-            description:'Four meals are included: dinner on Day 1 and Day 2, and breakfast on Day 2 and Day 3.',
+            description: 'Four meals are included: dinner on Day 1 and Day 2, and breakfast on Day 2 and Day 3.',
         },
         {
             title: 'Safety First',
-            description:'All permit arrangements and a first aid kit are provided to ensure a safe and hassle-free tour.',
+            description: 'All permit arrangements and a first aid kit are provided to ensure a safe and hassle-free tour.',
         },
         {
             title: 'Driver Expense',
-            description:"Driver's allowance, toll taxes, and state taxes are covered, allowing you to travel worry-free.",
+            description: "Driver's allowance, toll taxes, and state taxes are covered, allowing you to travel worry-free.",
         },
         {
             title: 'Free Parking',
-            description:'All parking and other charges are included, so you can focus solely on your adventure during the trip.',
+            description: 'All parking and other charges are included, so you can focus solely on your adventure during the trip.',
         },
 
     ],
     exclusions: [
         {
             title: 'Tour GST Charges',
-            description:'A 5% GST amount is collected on all incidentals throughout the entire trip.',
+            description: 'A 5% GST amount is collected on all incidentals throughout the entire trip.',
         },
         {
             title: 'Early Check-Ins',
-            description:'Any early hotel check-ins before the standard time are not included in the package.',
+            description: 'Any early hotel check-ins before the standard time are not included in the package.',
         },
         {
             title: 'Extra Personal Expenses',
-            description:'Expenses for personal purchases such as snacks, beverages, or any additional items are excluded.',
+            description: 'Expenses for personal purchases such as snacks, beverages, or any additional items are excluded.',
         },
         {
             title: 'Delayed Travel Expenses',
-            description:'Accommodation and meals in case of any travel delays are not included.',
+            description: 'Accommodation and meals in case of any travel delays are not included.',
         },
         {
             title: 'Meals and Expenses',
-            description:'Expenses for travel outside the scheduled itinerary, including airfare or rail fare, are not included.',
+            description: 'Expenses for travel outside the scheduled itinerary, including airfare or rail fare, are not included.',
         },
         {
             title: 'Entry Fees',
-            description:'Entry fees for monuments or other sightseeing attractions are not included.',
+            description: 'Entry fees for monuments or other sightseeing attractions are not included.',
         },
         {
             title: 'Unforeseen Events',
-            description:'Additional charges from unforeseen events like flight cancellations, landslides, or road blockages are not covered.',
+            description: 'Additional charges from unforeseen events like flight cancellations, landslides, or road blockages are not covered.',
         },
 
     ],

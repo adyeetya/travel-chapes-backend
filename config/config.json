@@ -91,7 +91,6 @@
       "expiresIn": "30d"
     },
     "nodemailer": {
-
       "USER": "",
       "PASS": ""
     },

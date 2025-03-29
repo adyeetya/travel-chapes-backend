@@ -23,5 +23,7 @@ module.exports = {
     TRIP_PLAN_UPDATED: "Trip plan updated successfully.",
     SOMETHINGWENT_WRONG: "Something went wrong please try again later.",
     DATA_SAVED: "Details saved successfully",
-    UPLOAD_SUCCESS: "File uploaded successfully"
+    UPLOAD_SUCCESS: "File uploaded successfully",
+    QUERY_SAVED:"Your query has been successfully saved.",
+    LOCATION_CREATED:"Location created successfully."
 }

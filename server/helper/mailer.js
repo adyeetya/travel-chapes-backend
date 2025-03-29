@@ -41,4 +41,9 @@ module.exports = {
         const html = emailContent.replace('{{OTP}}', otp);
         sendMail({ to, subject, html });
     },
+    sendEmailUserQuery: async(to,subject,userEmail,name,query)=>{
+        const emailContent = await getTemplateHtml('emailTemplate/userQuery.html');
+        const html = emailContent.replace('{{name}}',name).replace("{{email}}",userEmail).replace("{{Date}}",new Date().toLocaleDateString()).replace('{{query}}',query);
+        sendMail({to,subject,html});
+    }
 }
