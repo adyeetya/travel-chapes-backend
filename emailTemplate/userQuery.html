@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New User Inquiry</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .email-container {
+            max-width: 600px;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            margin: auto;
+        }
+
+        .content {
+            text-align: left;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="email-container">
+        <h2>New User Inquiry</h2>
+        <p>You have received a new inquiry from a user. Here are the details:</p>
+        <div class="content">
+            <p><strong>Name:</strong> {{name}}</p>
+            <p><strong>Email:</strong> {{email}}</p>
+            <p><strong>Date</strong>{{Date}}</p>
+            <p><strong>Message:</strong></p>
+            <p>{{query}}</p>
+        </div>
+    </div>
+</body>
+
+</html>
