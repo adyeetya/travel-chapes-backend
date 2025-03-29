@@ -273,7 +273,7 @@ async function insertTripPlan() {
         console.error("Error checking or inserting trip plan:", error);
     }
 }
-insertTripPlan();
+// insertTripPlan();
 module.exports = Planner;
 
 
