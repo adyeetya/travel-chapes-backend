@@ -6,7 +6,7 @@ const options = {
     collection: 'tripPlan'
 }
 const tripPlanSchema = new mongoose.Schema({
-    id: { type: String, required: true },
+    slug: { type: String, required: true },
     name: { type: String, required: true },
     city: { type: String, required: true },
     title: { type: String },
@@ -15,18 +15,6 @@ const tripPlanSchema = new mongoose.Schema({
     category: { type: Array },
     ageGroup: { type: String },
     minPrice: { type: String },
-    batch: [
-        {
-            date: { type: String },
-            transports: [
-                {
-                    type: { type: String },
-                    costTripleSharing: { type: String },
-                    costDoubleSharing: { type: String },
-                },
-            ],
-        },
-    ],
     banners: {
         phone: { type: String },
         web: { type: String },
@@ -36,12 +24,6 @@ const tripPlanSchema = new mongoose.Schema({
     metaDescription: { type: String },
     headline: { type: String },
     description: { type: String },
-    shortItinerary: [
-        {
-            day: { type: String },
-            description: { type: String },
-        },
-    ],
     fullItinerary: [
         {
             day: { type: String },
@@ -77,7 +59,7 @@ const Planner = mongoose.model('tripPlan', tripPlanSchema);
 
 
 const tripPlanData = {
-    id: 'chopta-tungnath',
+    slug:'chopta-tungnath',
     name: 'Chopta',
     title: 'Chopta Tungnath Trek',
     route: 'Delhi To Delhi',

@@ -12,8 +12,7 @@ import { tripFormServices } from "../../services/tripForm";
 const { findAdmin } = adminServices
 const { findUser } = userServices;
 const { createTripFrom } = tripFormServices
-const { createTripPlans, findAlltripPlans, findTripPlans } = tripPlanServices;
-
+const { createTripPlans, findAlltripPlans, findTripPlans, updateTripPlans } = tripPlanServices;
 
 class tripPlansController {
     async findAlltripPlans(req, res, next) {
@@ -26,10 +25,6 @@ class tripPlansController {
             if (error) {
                 throw apiError.badRequest(error.details[0].message)
             }
-            const userResult = await findUser({ _id: req.userId })
-            if (!userResult) {
-                throw apiError.notFound(responseMessage.USER_NOT_FOUND)
-            }
             const result = await findAlltripPlans(value)
             if (result.docs.length == 0) {
                 throw apiError.notFound(responseMessage.DATA_NOT_FOUND)
@@ -41,6 +36,7 @@ class tripPlansController {
     }
     async createTripPlans(req, res, next) {
         const validSchema = Joi.object({
+            slug: Joi.string().required(),
             name: Joi.string().required(),
             title: Joi.string().optional(),
             city: Joi.string().required(),
@@ -122,6 +118,7 @@ class tripPlansController {
     async updateTripPlan(req, res, next) {
         const updateSchema = Joi.object({
             _id: Joi.string().required(),
+            slug: Joi.string().required(),
             name: Joi.string().optional(),
             title: Joi.string().optional(),
             city: Joi.string().required(),
@@ -130,18 +127,6 @@ class tripPlansController {
             category: Joi.array().optional(),
             ageGroup: Joi.string().optional(),
             minPrice: Joi.string().optional(),
-            batch: Joi.array().items(
-                Joi.object({
-                    date: Joi.string().optional(),
-                    transports: Joi.array().items(
-                        Joi.object({
-                            type: Joi.string().optional(),
-                            costTripleSharing: Joi.string().optional(),
-                            costDoubleSharing: Joi.string().optional(),
-                        })
-                    ),
-                })
-            ).optional(),
             banners: Joi.object({
                 phone: Joi.string().optional(),
                 web: Joi.string().optional(),
@@ -151,12 +136,6 @@ class tripPlansController {
             metaDescription: Joi.string().optional(),
             headline: Joi.string().optional(),
             description: Joi.string().optional(),
-            shortItinerary: Joi.array().items(
-                Joi.object({
-                    day: Joi.string().optional(),
-                    description: Joi.string().optional(),
-                })
-            ).optional(),
             fullItinerary: Joi.array().items(
                 Joi.object({
                     day: Joi.string().optional(),
@@ -196,7 +175,7 @@ class tripPlansController {
                 return next(apiError.notFound(responseMessage.TRIP_PLAN_NOT_FOUND));
             }
 
-            await updateTripPlanById(tripPlanId, value);
+            await updateTripPlans({ _id: value._id }, value);
             return res.json(new response({}, responseMessage.TRIP_PLAN_UPDATED));
         } catch (err) {
             next(err);
@@ -271,6 +250,24 @@ class tripPlansController {
             return res.json(new response({}, responseMessage.DATA_SAVED))
         } catch (error) {
             next(error)
+        }
+    }
+
+    async getAllIds(req, res, next) {
+        try {
+            const result = await findAlltripPlans({
+                query: {},
+                projection: { slug: 1 }
+            });
+
+            if (!result.docs || result.docs.length === 0) {
+                throw apiError.notFound(responseMessage.DATA_NOT_FOUND);
+            }
+            const ids = result.docs.map(trip => trip.slug.toString()); // Convert ObjectId to string
+
+            return res.json(new response(ids, responseMessage.DATA_FOUND));
+        } catch (error) {
+            next(error);
         }
     }
 }

@@ -23,6 +23,10 @@ const hotelSchema = new mongoose.Schema({
     contact: {
         type: String,
         required: true
+    },
+    isDeleted: {
+        type: Boolean,
+        default: false
     }
 }, {
     timestamps: true, collection: "hotel"

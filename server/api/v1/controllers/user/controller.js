@@ -8,7 +8,7 @@ const { createUser, findUser, updateUser } = userServices;
 const commonFunction = require("../../../../helper/utlis");
 const userType = require("../../../../enums/userType");
 const sendMobileOtp = require("../../../../helper/mobileSms");
-import { sendEmailUserQuery } from "../../../../helper/mailer";
+// import { sendEmailUserQuery } from "../../../../helper/mailer";
 import { userQueryServices } from "../../services/userQuery";
 const { createQuery } = userQueryServices;
 import jwt from "jsonwebtoken";
@@ -164,27 +164,35 @@ class userController {
 
   async validateToken(req, res, next) {
     try {
-      if (!req.headers.token) {
+      const authHeader = req.headers.authorization;
+      if (!authHeader || !authHeader.startsWith("Bearer ")) {
         return res.status(400).send({ responseCode: 400, responseMessage: 'Token required. Please provide a token.' });
       }
-      jwt.verify(req.headers.token, global.gConfig.jwtsecret, async (err, result) => {
+  
+      const token = authHeader.split(" ")[1]; // Extract the token from "Bearer <token>"
+      if (!token) {
+        return res.status(400).send({ responseCode: 400, responseMessage: 'Token required. Please provide a token.' });
+      }
+  
+      jwt.verify(token, global.gConfig.jwtsecret, async (err, result) => {
         if (err) {
           return res.status(401).send({ responseCode: 401, responseMessage: 'Unauthorized' });
         }
-
+  
         const userResult = await findUser({ _id: result.userId, status: { $eq: status.active } });
         if (!userResult) {
           return res.status(404).send({ responseCode: 404, responseMessage: 'User not found' });
         }
+  
         const obj = {
           name: userResult.name,
           mobileNumber: userResult.mobileNumber,
           email: userResult.email
-        }
+        };
         return res.json(new response(obj, responseMessage.DATA_FOUND));
       });
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
   async postQuery(req, res, next) {

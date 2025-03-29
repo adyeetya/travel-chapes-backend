@@ -1,6 +1,7 @@
 require("../config/config");
 import Server from "./common/server";
 import Routes from "./routes"
+// console.log("global.gConfig.config_id>>>>>>>",global.gConfig.config_id);
 
 let dbUrl = 'mongodb+srv://2612adityasingh2000:kkhxx3RNuvX3dVhD@cluster0.8p16f.mongodb.net/travel-chapes?retryWrites=true&w=majority&appName=Cluster0';
 

@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const tripSchema = new mongoose.Schema({
-    location: { type: String, required: true },
+    locationId: { type: mongoose.Types.ObjectId, ref: "location" ,required: true },
     pickup: { type: String, required: true },
     viaPoints: [{ type: String }],
     drop: { type: String, required: true },
@@ -16,9 +16,10 @@ const tripSchema = new mongoose.Schema({
         bus: { price: Number },
         gst: { type: Number, default: 18 }
     },
-    customerIds: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Customer' }],
-    createdAt: { type: Date, default: Date.now },
-    updatedAt: { type: Date, default: Date.now }
+    isDeleted: {
+        type: Boolean,
+        default: false
+    }
 }, { timestamps: true, collection: "trip" });
 
 module.exports = mongoose.model("trip", tripSchema)
