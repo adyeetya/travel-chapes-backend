@@ -15,18 +15,6 @@ const tripPlanSchema = new mongoose.Schema({
     category: { type: Array },
     ageGroup: { type: String },
     minPrice: { type: String },
-    batch: [
-        {
-            date: { type: String },
-            transports: [
-                {
-                    type: { type: String },
-                    costTripleSharing: { type: String },
-                    costDoubleSharing: { type: String },
-                },
-            ],
-        },
-    ],
     banners: {
         phone: { type: String },
         web: { type: String },
@@ -36,12 +24,6 @@ const tripPlanSchema = new mongoose.Schema({
     metaDescription: { type: String },
     headline: { type: String },
     description: { type: String },
-    shortItinerary: [
-        {
-            day: { type: String },
-            description: { type: String },
-        },
-    ],
     fullItinerary: [
         {
             day: { type: String },
@@ -291,7 +273,7 @@ async function insertTripPlan() {
         console.error("Error checking or inserting trip plan:", error);
     }
 }
-insertTripPlan();
+// insertTripPlan();
 module.exports = Planner;
 
 

@@ -32,6 +32,6 @@ async function defaultAdmin() {
         console.log(error)
     }
 }
-defaultAdmin();
+// defaultAdmin();
 
 module.exports = admin

@@ -8,7 +8,7 @@ const { createUser, findUser, updateUser } = userServices;
 const commonFunction = require("../../../../helper/utlis");
 const userType = require("../../../../enums/userType");
 const sendMobileOtp = require("../../../../helper/mobileSms");
-import { sendEmailUserQuery } from "../../../../helper/mailer";
+// import { sendEmailUserQuery } from "../../../../helper/mailer";
 import { userQueryServices } from "../../services/userQuery";
 const { createQuery } = userQueryServices;
 import jwt from "jsonwebtoken";
