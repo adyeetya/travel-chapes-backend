@@ -267,6 +267,27 @@ class tripPlansController {
             next(error)
         }
     }
+
+    async getAllIds(req, res, next) {
+        try {
+            // Find all trip plans but only project the 'id' field
+            const result = await findAlltripPlans({ 
+                query: {}, 
+                projection: { slug: 1 }  // Changed to _id since your schema doesn't show an 'id' field
+            });
+            
+            if (!result.docs || result.docs.length === 0) {
+                throw apiError.notFound(responseMessage.DATA_NOT_FOUND);
+            }
+            // console.log(result.docs)
+            // Extract just the _id values from the documents
+            const ids = result.docs.map(trip => trip.slug.toString()); // Convert ObjectId to string
+            
+            return res.json(new response(ids, responseMessage.DATA_FOUND));
+        } catch (error) {
+            next(error);
+        }
+    }
 }
 
 
