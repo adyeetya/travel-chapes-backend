@@ -6,7 +6,7 @@ const options = {
     collection: 'tripPlan'
 }
 const tripPlanSchema = new mongoose.Schema({
-    id: { type: String, required: true },
+    slug: { type: String, required: true },
     name: { type: String, required: true },
     city: { type: String, required: true },
     title: { type: String },
@@ -77,7 +77,7 @@ const Planner = mongoose.model('tripPlan', tripPlanSchema);
 
 
 const tripPlanData = {
-    id: 'chopta-tungnath',
+    slug:'chopta-tungnath'
     name: 'Chopta',
     title: 'Chopta Tungnath Trek',
     route: 'Delhi To Delhi',
