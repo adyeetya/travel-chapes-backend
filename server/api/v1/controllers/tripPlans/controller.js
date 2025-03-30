@@ -86,12 +86,12 @@ class tripPlansController {
             if (error) {
                 return next(apiError.badRequest(error.details[0].message)); // Use `next` directly
             }
-            const adminResult = await findAdmin({ where: { _id: req.userId } });
-            if (!adminResult) {
-                return next(apiError.notFound(responseMessage.ADMIN_NOT_FOUND));
-            }
+            // const adminResult = await findAdmin({ where: { _id: req.userId } });
+            // if (!adminResult) {
+            //     return next(apiError.notFound(responseMessage.ADMIN_NOT_FOUND));
+            // }
             const checkSlug = await findTripPlans({ slug: value.slug });
-            if (!checkSlug) {
+            if (checkSlug) {
                 throw apiError.alreadyExist(responseMessage.ALREADY_EXIST);
             }
             await createTripPlans(value);
