@@ -1,6 +1,7 @@
 import Express from 'express';
 import controller from "./controller"
 import uploadHandler from '../../../../helper/uploadHandler';
+// /api/v1/admin
 module.exports = Express.Router()
      .post('/loginOtp', controller.loginOtp)
      .put('/verifyLoginOtp', controller.verifyLoginOtp)

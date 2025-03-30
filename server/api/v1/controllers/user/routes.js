@@ -1,5 +1,6 @@
 import Express from 'express';
 import controller from "./controller"
+// /api/v1/user
 module.exports = Express.Router()
      .post('/signup', controller.signup)
      .put('/verifyOtp', controller.verifyOtp)

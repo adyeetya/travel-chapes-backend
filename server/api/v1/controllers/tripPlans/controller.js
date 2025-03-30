@@ -39,24 +39,13 @@ class tripPlansController {
             slug: Joi.string().required(),
             name: Joi.string().required(),
             title: Joi.string().optional(),
-            city: Joi.string().required(),
+           
             route: Joi.string().required(),
-            duration: Joi.string().required(),
+            duration: Joi.string().optional(),
             category: Joi.array().optional(),
             ageGroup: Joi.string().optional(),
             minPrice: Joi.string().required(),
-            batch: Joi.array().items(
-                Joi.object({
-                    date: Joi.string().required(),
-                    transports: Joi.array().items(
-                        Joi.object({
-                            type: Joi.string().required(),
-                            costTripleSharing: Joi.string().optional(),
-                            costDoubleSharing: Joi.string().optional(),
-                        })
-                    ),
-                })
-            ).optional(),
+           
             banners: Joi.object({
                 phone: Joi.string().optional(),
                 web: Joi.string().optional(),
@@ -66,12 +55,7 @@ class tripPlansController {
             metaDescription: Joi.string().optional(),
             headline: Joi.string().optional(),
             description: Joi.string().optional(),
-            shortItinerary: Joi.array().items(
-                Joi.object({
-                    day: Joi.string().required(),
-                    description: Joi.string().optional(),
-                })
-            ).optional(),
+            
             fullItinerary: Joi.array().items(
                 Joi.object({
                     day: Joi.string().required(),
