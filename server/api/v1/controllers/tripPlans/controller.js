@@ -45,7 +45,6 @@ class tripPlansController {
             category: Joi.array().optional(),
             ageGroup: Joi.string().optional(),
             minPrice: Joi.string().required(),
-           
             banners: Joi.object({
                 phone: Joi.string().optional(),
                 web: Joi.string().optional(),
@@ -55,7 +54,6 @@ class tripPlansController {
             metaDescription: Joi.string().optional(),
             headline: Joi.string().optional(),
             description: Joi.string().optional(),
-            
             fullItinerary: Joi.array().items(
                 Joi.object({
                     day: Joi.string().required(),
@@ -92,7 +90,10 @@ class tripPlansController {
             if (!adminResult) {
                 return next(apiError.notFound(responseMessage.ADMIN_NOT_FOUND));
             }
-
+            const checkSlug = await findTripPlans({ slug: value.slug });
+            if (!checkSlug) {
+                throw apiError.alreadyExist(responseMessage.ALREADY_EXIST);
+            }
             await createTripPlans(value);
             return res.json(new response({}, responseMessage.TRIP_PLAN_CREATED));
         } catch (err) {
@@ -154,7 +155,7 @@ class tripPlansController {
                 return next(apiError.badRequest(error.details[0].message));
             }
 
-            const tripPlan = await findTripPlans({ where: { _id: value._id } });
+            const tripPlan = await findTripPlans({ _id: value._id });
             if (!tripPlan) {
                 return next(apiError.notFound(responseMessage.TRIP_PLAN_NOT_FOUND));
             }
@@ -168,7 +169,7 @@ class tripPlansController {
     async viewTripPlan(req, res, next) {
         try {
             const tripPlanId = req.query._id;
-            const tripPlan = await findTripPlans({ where: { _id: tripPlanId } });
+            const tripPlan = await findTripPlans({ _id: tripPlanId });
             if (!tripPlan) {
                 return next(apiError.notFound(responseMessage.TRIP_PLAN_NOT_FOUND));
             }

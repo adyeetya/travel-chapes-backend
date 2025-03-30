@@ -220,6 +220,7 @@ class tripRequirementController {
     async createTrip(req, res, next) {
         const validSchema = Joi.object({
             locationId: Joi.string().required(),
+            slug: Joi.string().required(),
             pickup: Joi.string().required(),
             viaPoints: Joi.array().items(Joi.string()).optional(),
             drop: Joi.string().required(),
@@ -284,6 +285,7 @@ class tripRequirementController {
         const validSchema = Joi.object({
             _id: Joi.string().required(),
             locationId: Joi.string().required(),
+            slug: Joi.string().required(),
             pickup: Joi.string().required(),
             viaPoints: Joi.array().items(Joi.string()).optional(),
             drop: Joi.string().required(),

@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const tripSchema = new mongoose.Schema({
-    locationId: { type: mongoose.Types.ObjectId, ref: "location" ,required: true },
+    locationId: { type: mongoose.Types.ObjectId, ref: "location", required: true },
+    slug: { type: String, required: true },
     pickup: { type: String, required: true },
     viaPoints: [{ type: String }],
     drop: { type: String, required: true },

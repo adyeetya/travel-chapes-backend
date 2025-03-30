@@ -32,7 +32,7 @@ class ExpressServer {
     async configureDb(dbUrl) {
         try {
             // console.log(dbUrl)
-            mongoose.connect(dbUrl, {
+           await mongoose.connect(dbUrl, {
             })
             console.log('Connected to MongoDB ✔');
             return this;
