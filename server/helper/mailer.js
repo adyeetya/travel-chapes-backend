@@ -1,7 +1,8 @@
 import nodemailer from "nodemailer";
 import path from "path";
 import fs from 'fs/promises';
-// console.log("global.gConfig------->",global);
+require("../../config/config")
+// console.log("global.gConfig------->",global.gConfig);
 
 const user = global.gConfig.nodemailer.USER;
 const password = global.gConfig.nodemailer.PASS
