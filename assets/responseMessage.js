@@ -25,5 +25,6 @@ module.exports = {
     DATA_SAVED: "Details saved successfully",
     UPLOAD_SUCCESS: "File uploaded successfully",
     QUERY_SAVED:"Your query has been successfully saved.",
-    LOCATION_CREATED:"Location created successfully."
+    LOCATION_CREATED:"Location created successfully.",
+    ALREADY_EXIST:"Slug already exist."
 }
