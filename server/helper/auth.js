@@ -6,11 +6,12 @@ require("../../config/config");
 module.exports = {
     async verifyToken(req, res, next) {
         try {
-            if (!req.headers.token) {
+            if (!req.headers.Authorization) {
                 return res.status(400).send({ responseCode: 400, responseMessage: 'Token required. Please provide a token.' });
             }
-
-            jwt.verify(req.headers.token, global.gConfig.jwtsecret, async (err, result) => {
+            const authHeader = req.headers.authorization;
+            const token = authHeader.split(' ')[1];
+            jwt.verify(token, global.gConfig.jwtsecret, async (err, result) => {
                 if (err) {
                     return res.status(401).send({ responseCode: 401, responseMessage: 'Unauthorized' });
                 }
