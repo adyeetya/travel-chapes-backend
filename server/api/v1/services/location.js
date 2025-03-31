@@ -1,6 +1,7 @@
 import locationModel from "../../../models/location";
 const locationServices = {
     createLocation: async (insertObj) => {
+       
         return await locationModel.create(insertObj);
     },
     findLocation: async (query) => {
@@ -10,7 +11,8 @@ const locationServices = {
         return await locationModel.update(query, updatedObj, { new: true });
     },
     findLocationList: async (query) => {
-        return await locationModel.findAll(query);
+        // console.log('query', locationModel.find(query))
+        return await locationModel.find(query);
     }
 }
 
