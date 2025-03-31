@@ -6,7 +6,7 @@ import status from "../../../../enums/status";
 import { locationServices } from "../../services/location";
 const { createLocation, findLocation, updateLocation, findLocationList } = locationServices;
 import { hotelServices } from "../../services/hotel";
-const { createHotel, findHotel, updateHotel, findHotelList } = hotelServices;
+const { createHotel, findHotel, updateHotel, findHotelList, finHotelPopulate } = hotelServices;
 import { vehicaleServices } from "../../services/vehicale";
 const { createVehicale, findVehicale, updateVehicale, findVehicaleList } = vehicaleServices;
 import { createTrip, findTrip, updateTrip, findTripList } from "../../services/trip";
@@ -75,16 +75,20 @@ class tripRequirementController {
             contact: Joi.string().required()
         });
         try {
-            const { error, value } = await Joi.validate(req.body, validSchema);
-            if (error) {
-                throw apiError.badRequest(error.details[0].message);
-            }
-            const checkLocation = await findLocation({ _id: value._id, isDeleted: false });
+            // console.log(">>>>>>>>>>>>>", req.body);
+
+            const validateBody = await validSchema.validate(req.body);
+            // console.log(">>>>>>>>>>>>>", validateBody);
+
+            const checkLocation = await findLocation({ _id: validateBody.locationId, isDeleted: false });
             if (!checkLocation) {
                 throw apiError.notFound(responseMessage.DATA_NOT_FOUND);
             }
-            await createHotel(value);
-            return res.json(new response({}, responseMessage.HOTEL_CREATED));
+            const result = await createHotel(validateBody);
+            const hotelResult = await finHotelPopulate({ _id: result._id })
+            // console.log(">>>>>>>>>>>>>>>|", hotelResult);
+
+            return res.json(new response(hotelResult, responseMessage.HOTEL_CREATED));
         } catch (error) {
             next(error);
         }
