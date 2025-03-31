@@ -18,13 +18,17 @@ class tripRequirementController {
             country: Joi.string().required(),
             description: Joi.string().optional()
         })
+        console.log('value', req.body)
         try {
-            const { error, value } = await validSchema.validate(req.body);
-            if (error) {
-                throw apiError.badRequest(error.details[0].message);
-            }
-            await createLocation(value);
-            return res.json(new response({}, responseMessage.LOCATION_CREATED));
+            // const { error, value } = await validSchema.validate(req.body);
+            // console.log('value', value)
+            const value = req.body
+            // if (error) {
+            //     throw apiError.badRequest(error.details[0].message);
+            // }
+            const result = await createLocation(value);
+            console.log(result.value)
+            return res.json(new response(result, responseMessage.LOCATION_CREATED));
         } catch (error) {
             console.log(error);
             next(error);
@@ -33,10 +37,11 @@ class tripRequirementController {
     async locationList(req, res, next) {
         try {
             const result = await findLocationList({ isDeleted: false });
+            // console.log('result', result)
             if (result.length == 0) {
                 throw apiError.notFound(responseMessage.DATA_NOT_FOUND);
             }
-            return res.json(new response({}, responseMessage.DATA_FOUND));
+            return res.json(new response(result, responseMessage.DATA_FOUND));
         } catch (error) {
             next(error);
         }
