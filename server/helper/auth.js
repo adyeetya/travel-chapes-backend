@@ -32,8 +32,8 @@ module.exports = {
 
                 }
 
-                console.log('result:', result);
-                console.log('userResult:', userResult);
+                // console.log('result:', result);
+                // console.log('userResult:', userResult);
 
                 // Attach user information to the request object for further use
                 req.userId = result.userId;

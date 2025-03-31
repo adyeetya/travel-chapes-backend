@@ -20,11 +20,11 @@ class tripRequirementController {
         })
         // console.log('value', req.body)
         try {
-            const { error, value } = await Joi.validate(req.body, validSchema);
+            const { error, value } = await validSchema.validate(req.body);
             if (error) {
                 throw apiError.badRequest(error.details[0].message);
             }
-           const result = await createLocation(value);
+            const result = await createLocation(value);
             return res.json(new response(result, responseMessage.LOCATION_CREATED));
         } catch (error) {
             console.log(error);
@@ -52,7 +52,7 @@ class tripRequirementController {
             description: Joi.string().optional()
         })
         try {
-            const { error, value } = await Joi.validate(req.body, validSchema);
+            const { error, value } = await validSchema.validate(req.body);
             if (error) {
                 throw apiError.badRequest(error.details[0].message);
             }
@@ -77,14 +77,17 @@ class tripRequirementController {
         try {
             // console.log(">>>>>>>>>>>>>", req.body);
 
-            const validateBody = await validSchema.validate(req.body);
+            const { error, value } = await validSchema.validate(req.body);
+            if (error) {
+                throw apiError.badRequest(error.details[0].message);
+            }
             // console.log(">>>>>>>>>>>>>", validateBody);
 
-            const checkLocation = await findLocation({ _id: validateBody.locationId, isDeleted: false });
+            const checkLocation = await findLocation({ _id: value.locationId, isDeleted: false });
             if (!checkLocation) {
                 throw apiError.notFound(responseMessage.DATA_NOT_FOUND);
             }
-            const result = await createHotel(validateBody);
+            const result = await createHotel(value);
             const hotelResult = await finHotelPopulate({ _id: result._id })
             // console.log(">>>>>>>>>>>>>>>|", hotelResult);
 
@@ -114,7 +117,7 @@ class tripRequirementController {
             contact: Joi.string().required()
         });
         try {
-            const { error, value } = await Joi.validate(req.body, validSchema);
+            const { error, value } = await validSchema.validate(req.body);
             if (error) {
                 throw apiError.badRequest(error.details[0].message);
             }
@@ -140,9 +143,12 @@ class tripRequirementController {
             contact: Joi.string().required(),
         });
         try {
-            const value = await Joi.validate(req.body, validSchema);
-    // console.log('value>>>',value)
-           
+            const { eror, value } = await validSchema.validate(req.body);
+            if (error) {
+                throw apiError.badRequest(error.details[0].message);
+            }
+            // console.log('value>>>',value)
+
             const result = await createVehicale(value);
             return res.json(new response(result, responseMessage.VEHICLE_CREATED));
         } catch (error) {
@@ -189,9 +195,12 @@ class tripRequirementController {
             _id: Joi.string().required()
         })
         try {
-            console.log('body>>>>>>>>',req.body)
-            const value = await Joi.validate(req.body, validSchema);
-            console.log(value)
+            // console.log('body>>>>>>>>', req.body)
+            const { error, value } = await validSchema.validate(req.body);
+            if (error) {
+                throw apiError.badRequest(error.details[0].message);
+            }
+            // console.log(value)
             if (value.type == 'hotel') {
                 const hotelResult = await findHotel({ _id: value._id, isDeleted: false });
                 if (!hotelResult) {
@@ -242,7 +251,7 @@ class tripRequirementController {
             }).required()
         });
         try {
-            const { error, value } = await Joi.validate(req.body, validSchema);
+            const { error, value } = await validSchema.validate(req.body);
             if (error) {
                 throw apiError.badRequest(error.details[0].message);
             }
@@ -272,7 +281,7 @@ class tripRequirementController {
             _id: Joi.string().required(),
         })
         try {
-            const { error, value } = await Joi.validate(req.query, validSchema);
+            const { error, value } = await validSchema.validate(req.query);
             if (error) {
                 throw apiError.badRequest(error.details[0].message);
             }
@@ -307,7 +316,7 @@ class tripRequirementController {
             }).required()
         });
         try {
-            const { error, value } = await Joi.validate(req.body, validSchema);
+            const { error, value } = await validSchema.validate(req.body);
             if (error) {
                 throw apiError.badRequest(error.details[0].message);
             }
@@ -326,7 +335,7 @@ class tripRequirementController {
             _id: Joi.string().required()
         })
         try {
-            const { error, value } = await Joi.validate(req.body, validSchema);
+            const { error, value } = await validSchema.validate(req.body);
             if (error) {
                 throw apiError.badRequest(error.details[0].message);
             }

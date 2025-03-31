@@ -12,13 +12,17 @@ const sendMobileOtp = require("../../../../helper/mobileSms");
 import { uploadFileToS3 } from "../../../../helper/aws_uploads";
 class adminController {
     async loginOtp(req, res, next) {
-        const validationSchema = {
+        const validationSchema = Joi.object({
             email: Joi.string().required(),
             password: Joi.string().required()
-        };
+        });
         try {
-            let { email, password } = await Joi.validate(req.body, validationSchema);
+            let { error, value } = await validationSchema.validate(req.body);
+            if (error) {
+                throw apiError.badRequest(error.details[0].message);
+            }
             // let {email, password} = req.body
+            let { email, password } = values;
 
             email = email.toLowerCase();
             let query = { $and: [{ adminType: { $in: [userType.admin, userType.subAdmin] } }, { email: { $regex: new RegExp("^" + email + "$", "i") } }, { status: { $eq: status.active } }] }
@@ -45,12 +49,15 @@ class adminController {
         }
     }
     async resendOtp(req, res, next) {
-        var validationSchema = {
+        var validationSchema = Joi.object({
             email: Joi.string().required(),
-        };
+        });
         try {
-            var validatedBody = await Joi.validate(req.body, validationSchema);
-            let { email } = validatedBody;
+            var { error, value } = await validationSchema.validate(req.body);
+            if (error) {
+                throw apiError.badRequest(error.details[0].message);
+            }
+            let { email } = value;
             email = email.toLowerCase();
             var userResult = await findAdmin({ email: new RegExp("^" + email + "$", "i") })
             if (!userResult) {
@@ -67,12 +74,16 @@ class adminController {
         }
     }
     async verifyLoginOtp(req, res, next) {
-        const validationSchema = {
+        const validationSchema = Joi.object({
             email: Joi.string().required(),
             otp: Joi.number().required(),
-        };
+        });
         try {
-            let { email, otp, } = await Joi.validate(req.body, validationSchema);
+            const { error, value } = await validationSchema.validate(req.body);
+            if (error) {
+                throw apiError.badRequest(error.details[0].message);
+            }
+            let { email, otp, } = value;
             email = email.toLowerCase();
             const adminResult = await findAdmin({ email: { $regex: new RegExp("^" + email + "$", "i") }, status: { $eq: status.active } })
             if (!adminResult) {
@@ -92,10 +103,8 @@ class adminController {
             }
             let token = await commonFunction.getToken({ userId: adminResult._id, email: adminResult.email, adminType: adminResult.adminType });
 
-            console.log('token sent', token);
+            // console.log('token sent', token);
             return res.json(new response({ token }, responseMessage.ADMIN_LOGGEDIN))
-
-
         }
         catch (error) {
             console.log("errof form login===>>", error);
