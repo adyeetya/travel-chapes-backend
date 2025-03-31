@@ -3,6 +3,7 @@ import userType from '../enums/userType';
 import status from '../enums/status';
 const adminSchema = new mongoose.Schema({
     email: { type: String, required: true, unique: true },
+    mobileNumber: { type: String, required: true, unique: true },
     hashedPassword: { type: String, required: true },
     isEmailVerified: { type: Boolean, default: false },
     adminType: { type: String, default: userType.admin, enum: [userType.subAdmin, userType.admin] },
@@ -24,6 +25,7 @@ async function defaultAdmin() {
         }
         await admin.create({
             email:"2612adityasingh2000@gmail.com",
+            mobileNumber:"8400372110",
             hashedPassword:"$2b$10$iDyJH/ogzpqwLjSVMUzclu8K/.k9DBvxY3Ad4BOMUlArjGCIBDwiG"
         })
         console.log("New Default admin created!💪")
@@ -32,6 +34,6 @@ async function defaultAdmin() {
         console.log(error)
     }
 }
-// defaultAdmin();
+defaultAdmin();
 
 module.exports = admin
