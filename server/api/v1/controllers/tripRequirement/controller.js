@@ -140,12 +140,11 @@ class tripRequirementController {
             contact: Joi.string().required(),
         });
         try {
-            const { error, value } = await Joi.validate(req.body, validSchema);
-            if (error) {
-                throw apiError.badRequest(error.details[0].message);
-            }
-            await createVehicale(value);
-            return res.json(new response({}, responseMessage.VEHICLE_CREATED));
+            const value = await Joi.validate(req.body, validSchema);
+    // console.log('value>>>',value)
+           
+            const result = await createVehicale(value);
+            return res.json(new response(result, responseMessage.VEHICLE_CREATED));
         } catch (error) {
             next(error);
         }
@@ -190,10 +189,9 @@ class tripRequirementController {
             _id: Joi.string().required()
         })
         try {
-            const { error, value } = await Joi.validate(req.body, validSchema);
-            if (error) {
-                throw apiError.badRequest(error.details[0].message);
-            }
+            console.log('body>>>>>>>>',req.body)
+            const value = await Joi.validate(req.body, validSchema);
+            console.log(value)
             if (value.type == 'hotel') {
                 const hotelResult = await findHotel({ _id: value._id, isDeleted: false });
                 if (!hotelResult) {
