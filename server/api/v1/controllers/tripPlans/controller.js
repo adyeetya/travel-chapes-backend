@@ -39,9 +39,9 @@ class tripPlansController {
             slug: Joi.string().required(),
             name: Joi.string().required(),
             title: Joi.string().optional(),
-            city: Joi.string().required(),
+           
             route: Joi.string().required(),
-            duration: Joi.string().required(),
+            duration: Joi.string().optional(),
             category: Joi.array().optional(),
             ageGroup: Joi.string().optional(),
             minPrice: Joi.string().required(),
@@ -86,12 +86,12 @@ class tripPlansController {
             if (error) {
                 return next(apiError.badRequest(error.details[0].message)); // Use `next` directly
             }
-            const adminResult = await findAdmin({ where: { _id: req.userId } });
-            if (!adminResult) {
-                return next(apiError.notFound(responseMessage.ADMIN_NOT_FOUND));
-            }
+            // const adminResult = await findAdmin({ where: { _id: req.userId } });
+            // if (!adminResult) {
+            //     return next(apiError.notFound(responseMessage.ADMIN_NOT_FOUND));
+            // }
             const checkSlug = await findTripPlans({ slug: value.slug });
-            if (!checkSlug) {
+            if (checkSlug) {
                 throw apiError.alreadyExist(responseMessage.ALREADY_EXIST);
             }
             await createTripPlans(value);

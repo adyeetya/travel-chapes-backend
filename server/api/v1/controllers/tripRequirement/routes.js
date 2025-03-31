@@ -1,13 +1,14 @@
 import express from "express";
 import controller from "./controller";
 import auth from "../../../../helper/auth";
+// /api/v1/tripRequirement
 export default express.Router()
     .get("/getLocationList", controller.locationList)
     .get("/getHotelList", controller.hotelList)
     .get("/getVehicalList", controller.vehicaleList)
     .get("/getTripList", controller.tripList)
     .get("/viewTrip", controller.viewTrip)
-    .use(auth.verifyToken)
+    // .use(auth.verifyToken)
     .post("/createLocation", controller.createLocation)
     .put("/updateLocation", controller.updateLocation)
     .post("/createHotel", controller.createHotel)

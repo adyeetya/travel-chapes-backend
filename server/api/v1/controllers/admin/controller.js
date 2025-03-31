@@ -8,6 +8,7 @@ const { findAdmin, updateAdmin } = adminServices;
 const commonFunction = require("../../../../helper/utlis");
 const userType = require("../../../../enums/userType");
 const { loginEmailOTP } = require("../../../../helper/mailer");
+const sendMobileOtp = require("../../../../helper/mobileSms");
 import { uploadFileToS3 } from "../../../../helper/aws_uploads";
 class adminController {
     async loginOtp(req, res, next) {
@@ -17,18 +18,25 @@ class adminController {
         };
         try {
             let { email, password } = await Joi.validate(req.body, validationSchema);
+            // let {email, password} = req.body
+
             email = email.toLowerCase();
             let query = { $and: [{ adminType: { $in: [userType.admin, userType.subAdmin] } }, { email: { $regex: new RegExp("^" + email + "$", "i") } }, { status: { $eq: status.active } }] }
             const adminResult = await findAdmin(query);
             if (!adminResult) {
                 throw apiError.notFound(responseMessage.ADMIN_NOT_FOUND);
             }
+            console.log(adminResult)
             if (!commonFunction.compareHash(password, adminResult.hashedPassword)) {
                 throw apiError.invalid(responseMessage.INCORRECT_PASSWORD);
             }
             const otp = commonFunction.getOtp();
             console.log('otp sent - ', otp)
             // loginEmailOTP(email, 'Login OTP', otp);
+            const result = await sendMobileOtp(adminResult.mobileNumber, otp);
+            if (!result) {
+                throw apiError.internal(responseMessage.SOMETHINGWENT_WRONG);
+            }
             await updateAdmin({ _id: adminResult._id }, { otp: otp, otpTime: new Date(new Date().setMinutes(new Date().getMinutes() + 3)), isEmailVerified: false });
             return res.json(new response({}, responseMessage.OTP_SEND));
         } catch (error) {
