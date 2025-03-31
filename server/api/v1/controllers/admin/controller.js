@@ -19,7 +19,7 @@ class adminController {
         try {
             let { email, password } = await Joi.validate(req.body, validationSchema);
             // let {email, password} = req.body
-            
+
             email = email.toLowerCase();
             let query = { $and: [{ adminType: { $in: [userType.admin, userType.subAdmin] } }, { email: { $regex: new RegExp("^" + email + "$", "i") } }, { status: { $eq: status.active } }] }
             const adminResult = await findAdmin(query);
@@ -33,10 +33,10 @@ class adminController {
             const otp = commonFunction.getOtp();
             console.log('otp sent - ', otp)
             // loginEmailOTP(email, 'Login OTP', otp);
-             const result = await sendMobileOtp(adminResult.mobileNumber, otp);
+            const result = await sendMobileOtp(adminResult.mobileNumber, otp);
             if (!result) {
-                    throw apiError.internal(responseMessage.SOMETHINGWENT_WRONG);
-                  }
+                throw apiError.internal(responseMessage.SOMETHINGWENT_WRONG);
+            }
             await updateAdmin({ _id: adminResult._id }, { otp: otp, otpTime: new Date(new Date().setMinutes(new Date().getMinutes() + 3)), isEmailVerified: false });
             return res.json(new response({}, responseMessage.OTP_SEND));
         } catch (error) {
