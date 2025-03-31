@@ -9,9 +9,9 @@ const hotelSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    location: {
+    locationId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Location",
+        ref: "location",
         required: true
     },
     rating: {
