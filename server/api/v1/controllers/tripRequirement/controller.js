@@ -24,8 +24,8 @@ class tripRequirementController {
             if (error) {
                 throw apiError.badRequest(error.details[0].message);
             }
-            await createLocation(value);
-            return res.json(new response({}, responseMessage.LOCATION_CREATED));
+           const result = await createLocation(value);
+            return res.json(new response(result, responseMessage.LOCATION_CREATED));
         } catch (error) {
             console.log(error);
             next(error);
