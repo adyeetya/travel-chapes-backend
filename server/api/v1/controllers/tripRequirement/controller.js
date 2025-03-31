@@ -19,7 +19,7 @@ class tripRequirementController {
             description: Joi.string().optional()
         })
         try {
-            const { error, value } = await validSchema.validate(req.body);
+            const { error, value } = await Joi.validate(req.body,validSchema);
             if (error) {
                 throw apiError.badRequest(error.details[0].message);
             }
@@ -36,7 +36,7 @@ class tripRequirementController {
             if (result.length == 0) {
                 throw apiError.notFound(responseMessage.DATA_NOT_FOUND);
             }
-            return res.json(new response({}, responseMessage.DATA_FOUND));
+            return res.json(new response(result, responseMessage.DATA_FOUND));
         } catch (error) {
             next(error);
         }
