@@ -9,7 +9,8 @@ import { hotelServices } from "../../services/hotel";
 const { createHotel, findHotel, updateHotel, findHotelList, finHotelPopulate } = hotelServices;
 import { vehicaleServices } from "../../services/vehicale";
 const { createVehicale, findVehicale, updateVehicale, findVehicaleList } = vehicaleServices;
-import { createTrip, findTrip, updateTrip, findTripList } from "../../services/trip";
+import {tripServices} from "../../services/trip";
+const { createTripDetails, findTrip, updateTrip, findTripList } = tripServices;
 class tripRequirementController {
     async createLocation(req, res, next) {
         const validSchema = Joi.object({
@@ -143,7 +144,7 @@ class tripRequirementController {
             contact: Joi.string().required(),
         });
         try {
-            const { eror, value } = await validSchema.validate(req.body);
+            const { error, value } = await validSchema.validate(req.body);
             if (error) {
                 throw apiError.badRequest(error.details[0].message);
             }
@@ -235,8 +236,8 @@ class tripRequirementController {
             locationId: Joi.string().required(),
             slug: Joi.string().required(),
             pickup: Joi.string().required(),
-            viaPoints: Joi.array().items(Joi.string()).optional(),
-            drop: Joi.string().required(),
+            viaPoints: Joi.string().optional().allow(''),
+            
             startDate: Joi.date().required(),
             endDate: Joi.date().required(),
             days: Joi.number().required(),
@@ -244,11 +245,15 @@ class tripRequirementController {
             vehicles: Joi.array().items(Joi.string()).optional(),
             stays: Joi.array().items(Joi.string()).optional(),
             meals: Joi.array().items(Joi.string()).optional(),
-            pricing: Joi.object({
-                car: Joi.object({ price: Joi.number().required() }).optional(),
-                bus: Joi.object({ price: Joi.number().required() }).optional(),
-                gst: Joi.number().default(18)
-            }).required()
+            pricing: Joi.object().pattern(
+                Joi.string(), // Key can be any string (vehicle type)
+                Joi.object({ // Value must be an object with single/double/triple
+                    single: Joi.number().required(),
+                    double: Joi.number().required(),
+                    triple: Joi.number().required()
+                })
+            ).required(),
+            gst: Joi.number().default(18)
         });
         try {
             const { error, value } = await validSchema.validate(req.body);
@@ -259,8 +264,10 @@ class tripRequirementController {
             if (!locationResult) {
                 throw apiError.notFound(responseMessage.DATA_NOT_FOUND);
             }
-            await createTrip(value);
-            return res.json(new response({}, responseMessage.TRIP_CREATED));
+            // console.log('value', value)
+           const result =  await createTripDetails(value);
+        //    console.log('result', result)
+            return res.json(new response(result, responseMessage.TRIP_CREATED));
         } catch (error) {
             next(error);
         }

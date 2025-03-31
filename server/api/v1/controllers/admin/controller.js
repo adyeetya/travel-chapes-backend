@@ -22,7 +22,7 @@ class adminController {
                 throw apiError.badRequest(error.details[0].message);
             }
             // let {email, password} = req.body
-            let { email, password } = values;
+            let { email, password } = value;
 
             email = email.toLowerCase();
             let query = { $and: [{ adminType: { $in: [userType.admin, userType.subAdmin] } }, { email: { $regex: new RegExp("^" + email + "$", "i") } }, { status: { $eq: status.active } }] }
