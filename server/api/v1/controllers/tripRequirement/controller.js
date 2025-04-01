@@ -6,11 +6,11 @@ import status from "../../../../enums/status";
 import { locationServices } from "../../services/location";
 const { createLocation, findLocation, updateLocation, findLocationList } = locationServices;
 import { hotelServices } from "../../services/hotel";
-const { createHotel, findHotel, updateHotel, findHotelList, finHotelPopulate } = hotelServices;
+const { createHotel, findHotel, updateHotel, findHotelList, finHotelPopulate, hotelsList } = hotelServices;
 import { vehicaleServices } from "../../services/vehicale";
 const { createVehicale, findVehicale, updateVehicale, findVehicaleList } = vehicaleServices;
-import {tripServices} from "../../services/trip";
-const { createTripDetails, findTrip, updateTrip, findTripList } = tripServices;
+import { tripServices } from "../../services/trip";
+const { createTripDetails, findTrip, updateTrip, findTripList, findPopulateTrip } = tripServices;
 class tripRequirementController {
     async createLocation(req, res, next) {
         const validSchema = Joi.object({
@@ -237,7 +237,6 @@ class tripRequirementController {
             slug: Joi.string().required(),
             pickup: Joi.string().required(),
             viaPoints: Joi.string().optional().allow(''),
-            
             startDate: Joi.date().required(),
             endDate: Joi.date().required(),
             days: Joi.number().required(),
@@ -264,10 +263,19 @@ class tripRequirementController {
             if (!locationResult) {
                 throw apiError.notFound(responseMessage.DATA_NOT_FOUND);
             }
+            const checkHotels = await hotelsList({ _id: { $in: value.stays } });
+            if (value.stays.length !== checkHotels.length) {
+                throw apiError.notFound(responseMessage.HOTELS_NOT_FOUND);
+            }
+            const checkVehicels = await findVehicaleList({ _id: { $in: value.vehicles } });
+            if (checkVehicels.length !== value.vehicles.length) {
+                throw apiError.notFound(responseMessage.VEHICLE_NOT_FOUND);
+            }
             // console.log('value', value)
-           const result =  await createTripDetails(value);
-        //    console.log('result', result)
-            return res.json(new response(result, responseMessage.TRIP_CREATED));
+            const result = await createTripDetails(value);
+            const tripResult = await findPopulateTrip({ _id: result._id })
+            //    console.log('result', result)
+            return res.json(new response(tripResult, responseMessage.TRIP_CREATED));
         } catch (error) {
             next(error);
         }

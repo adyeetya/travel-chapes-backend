@@ -13,6 +13,9 @@ const hotelServices = {
     findHotelList: async (query) => {
         return await hotelModel.find(query).populate([{ path: "locationId" }]);
     },
+    hotelsList: async(query)=>{
+        return await hotelModel.find(query);
+    },
     finHotelPopulate: async (query) => {
         return await hotelModel.findOne(query).populate([{ path: "locationId" }]);
     }

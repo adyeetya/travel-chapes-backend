@@ -12,7 +12,10 @@ const tripServices = {
         return await tripModel.findOneAndUpdate(query, updatedObj, { new: true });
     },
     findTripList: async (query) => {
-        return await tripModel.find(query).populate([{ path: "locationId" }]);
+        return await tripModel.find(query).populate("vehicles").populate("stays").populate([{ path: "locationId" }]);
+    },
+    findPopulateTrip: async (query) => {
+        return await tripModel.findOne(query).populate("vehicles").populate("stays").populate([{ path: "locationId" }]);
     }
 }
 

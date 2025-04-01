@@ -27,5 +27,7 @@ module.exports = {
     QUERY_SAVED:"Your query has been successfully saved.",
     LOCATION_CREATED:"Location created successfully.",
     ALREADY_EXIST:"Slug already exist.",
-    HOTEL_CREATED:"Hotel created successfully."
+    HOTEL_CREATED:"Hotel created successfully.",
+    HOTELS_NOT_FOUND:"Hotels not found.",
+    VEHICLE_NOT_FOUND:"Vehicle not found."
 }
