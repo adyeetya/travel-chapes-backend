@@ -267,7 +267,7 @@ class tripRequirementController {
       startDate: Joi.date().required(),
       endDate: Joi.date().required(),
       days: Joi.number().required(),
-     stays: Joi.array().items(Joi.string().allow('')).optional(),
+      stays: Joi.array().items(Joi.string().allow("")).optional(),
       vehicles: Joi.array().items(Joi.string().allow("")).optional(),
       meals: Joi.array().items(Joi.string().allow("")).optional(),
       itinerary: Joi.array().items(Joi.string().allow("")).optional(),
@@ -285,42 +285,26 @@ class tripRequirementController {
       gst: Joi.number().default(18),
     });
     try {
-      console.log("body", req.body);
+      // console.log("body", req.body);
       const { error, value } = await validSchema.validate(req.body);
-      console.log("value", value);
+      // console.log("value", value);
       if (error) {
         throw apiError.badRequest(error.details[0].message);
       }
-// converting ''  to null before passing it to the db
+      // converting ''  to null before passing it to the db
       value.stays = value.stays.map((s) => (s === "" ? null : s));
-      console.log("req value", value);
-
-
-      const locationResult = await findLocation({
-        _id: value.locationId,
-        isDeleted: false,
-      });
+      // console.log("req value", value);
+      const locationResult = await findLocation({ _id: value.locationId, isDeleted: false });
       if (!locationResult) {
         throw apiError.notFound(responseMessage.DATA_NOT_FOUND);
       }
 
-   
+
       const validStays = value.stays.filter(s => s !== null);
 
-        console.log("valid stays", validStays);
+      // console.log("valid stays", validStays);
 
-        // If there are any valid stays (non-null), check the hotels
-        // working but its not saving null in db if that is possible implement that right now its only saving 
-        // ['id',id'] in the db if i sent ['id','','id'] it removes that empty string or null check that 
-        if (validStays.length > 0) {
-            const checkHotels = await hotelsList({ _id: { $in: validStays } });
-            if (validStays.length !== checkHotels.length) {
-                throw apiError.notFound(responseMessage.HOTELS_NOT_FOUND);
-            }
-        }
-      const checkVehicels = await findVehicaleList({
-        _id: { $in: value.vehicles },
-      });
+      const checkVehicels = await findVehicaleList({ _id: { $in: value.vehicles } });
       if (checkVehicels.length !== value.vehicles.length) {
         throw apiError.notFound(responseMessage.VEHICLE_NOT_FOUND);
       }
