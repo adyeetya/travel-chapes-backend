@@ -114,19 +114,16 @@ class tripRequirementController {
             contact: Joi.string().required()
         });
         try {
-            const { error, value } = await Joi.validate(req.body, validSchema);
-            if (error) {
-                throw apiError.badRequest(error.details[0].message);
-            }
-            const result = await findHotel({ _id: value._id, isDeleted: false });
+            const validatedBody = await Joi.validate(req.body, validSchema);
+            const result = await findHotel({ _id: validatedBody._id, isDeleted: false });
             if (!result) {
                 throw apiError.notFound(responseMessage.DATA_NOT_FOUND);
             }
-            const checkLocation = await findLocation({ _id: value._id });
+            const checkLocation = await findLocation({ _id: validatedBody._id });
             if (!checkLocation) {
                 throw apiError.notFound(responseMessage.DATA_NOT_FOUND);
             }
-            await updateHotel({ _id: result._id }, value);
+            await updateHotel({ _id: result._id }, validatedBody);
             return res.json(new response({}, responseMessage.DATA_SAVED));
         } catch (error) {
             next(error);
