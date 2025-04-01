@@ -168,8 +168,27 @@ class tripPlansController {
     }
     async viewTripPlan(req, res, next) {
         try {
+            console.log("req.query", req.query);
+            // Option 1: Get by ID if _id query parameter exists
             const tripPlanId = req.query._id;
-            const tripPlan = await findTripPlans({ _id: tripPlanId });
+            
+            // Option 2: Get by slug if slug query parameter exists
+            const tripSlug = req.query.slug;
+    
+            // if (!tripPlanId && !tripSlug) {
+            //     return next(apiError.badRequest("Either _id or slug must be provided"));
+            // }
+    
+            // Build query - search by _id OR slug
+            const query = {};
+            if (tripPlanId) {
+                query._id = tripPlanId;
+            } else if (tripSlug) {
+                query.slug = tripSlug;
+            }
+    
+            const tripPlan = await findTripPlans(query);
+            
             if (!tripPlan) {
                 return next(apiError.notFound(responseMessage.TRIP_PLAN_NOT_FOUND));
             }

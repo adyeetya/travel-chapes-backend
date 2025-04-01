@@ -6,10 +6,11 @@ import status from "../../../../enums/status";
 import { locationServices } from "../../services/location";
 const { createLocation, findLocation, updateLocation, findLocationList } = locationServices;
 import { hotelServices } from "../../services/hotel";
-const { createHotel, findHotel, updateHotel, findHotelList, finHotelPopulate } = hotelServices;
+const { createHotel, findHotel, updateHotel, findHotelList, finHotelPopulate, hotelsList } = hotelServices;
 import { vehicaleServices } from "../../services/vehicale";
 const { createVehicale, findVehicale, updateVehicale, findVehicaleList } = vehicaleServices;
-import { createTrip, findTrip, updateTrip, findTripList } from "../../services/trip";
+import { tripServices } from "../../services/trip";
+const { createTripDetails, findTrip, updateTrip, findTripList, findPopulateTrip } = tripServices;
 class tripRequirementController {
     async createLocation(req, res, next) {
         const validSchema = Joi.object({
@@ -20,12 +21,12 @@ class tripRequirementController {
         })
         // console.log('value', req.body)
         try {
-            const { error, value } = await Joi.validate(req.body, validSchema);
+            const { error, value } = await validSchema.validate(req.body);
             if (error) {
                 throw apiError.badRequest(error.details[0].message);
             }
-            await createLocation(value);
-            return res.json(new response({}, responseMessage.LOCATION_CREATED));
+            const result = await createLocation(value);
+            return res.json(new response(result, responseMessage.LOCATION_CREATED));
         } catch (error) {
             console.log(error);
             next(error);
@@ -52,7 +53,7 @@ class tripRequirementController {
             description: Joi.string().optional()
         })
         try {
-            const { error, value } = await Joi.validate(req.body, validSchema);
+            const { error, value } = await validSchema.validate(req.body);
             if (error) {
                 throw apiError.badRequest(error.details[0].message);
             }
@@ -77,14 +78,17 @@ class tripRequirementController {
         try {
             // console.log(">>>>>>>>>>>>>", req.body);
 
-            const validateBody = await validSchema.validate(req.body);
+            const { error, value } = await validSchema.validate(req.body);
+            if (error) {
+                throw apiError.badRequest(error.details[0].message);
+            }
             // console.log(">>>>>>>>>>>>>", validateBody);
 
-            const checkLocation = await findLocation({ _id: validateBody.locationId, isDeleted: false });
+            const checkLocation = await findLocation({ _id: value.locationId, isDeleted: false });
             if (!checkLocation) {
                 throw apiError.notFound(responseMessage.DATA_NOT_FOUND);
             }
-            const result = await createHotel(validateBody);
+            const result = await createHotel(value);
             const hotelResult = await finHotelPopulate({ _id: result._id })
             // console.log(">>>>>>>>>>>>>>>|", hotelResult);
 
@@ -114,8 +118,11 @@ class tripRequirementController {
             contact: Joi.string().required()
         });
         try {
-            const validatedBody = await Joi.validate(req.body, validSchema);
-            const result = await findHotel({ _id: validatedBody._id, isDeleted: false });
+            const { error, value } = await validSchema.validate(req.body);
+            if (error) {
+                throw apiError.badRequest(error.details[0].message);
+            }
+            const result = await findHotel({ _id: value._id, isDeleted: false });
             if (!result) {
                 throw apiError.notFound(responseMessage.DATA_NOT_FOUND);
             }
@@ -137,12 +144,14 @@ class tripRequirementController {
             contact: Joi.string().required(),
         });
         try {
-            const { error, value } = await Joi.validate(req.body, validSchema);
+            const { error, value } = await validSchema.validate(req.body);
             if (error) {
                 throw apiError.badRequest(error.details[0].message);
             }
-            await createVehicale(value);
-            return res.json(new response({}, responseMessage.VEHICLE_CREATED));
+            // console.log('value>>>',value)
+
+            const result = await createVehicale(value);
+            return res.json(new response(result, responseMessage.VEHICLE_CREATED));
         } catch (error) {
             next(error);
         }
@@ -187,10 +196,12 @@ class tripRequirementController {
             _id: Joi.string().required()
         })
         try {
-            const { error, value } = await Joi.validate(req.body, validSchema);
+            // console.log('body>>>>>>>>', req.body)
+            const { error, value } = await validSchema.validate(req.body);
             if (error) {
                 throw apiError.badRequest(error.details[0].message);
             }
+            // console.log(value)
             if (value.type == 'hotel') {
                 const hotelResult = await findHotel({ _id: value._id, isDeleted: false });
                 if (!hotelResult) {
@@ -225,8 +236,7 @@ class tripRequirementController {
             locationId: Joi.string().required(),
             slug: Joi.string().required(),
             pickup: Joi.string().required(),
-            viaPoints: Joi.array().items(Joi.string()).optional(),
-            drop: Joi.string().required(),
+            viaPoints: Joi.string().optional().allow(''),
             startDate: Joi.date().required(),
             endDate: Joi.date().required(),
             days: Joi.number().required(),
@@ -234,14 +244,18 @@ class tripRequirementController {
             vehicles: Joi.array().items(Joi.string()).optional(),
             stays: Joi.array().items(Joi.string()).optional(),
             meals: Joi.array().items(Joi.string()).optional(),
-            pricing: Joi.object({
-                car: Joi.object({ price: Joi.number().required() }).optional(),
-                bus: Joi.object({ price: Joi.number().required() }).optional(),
-                gst: Joi.number().default(18)
-            }).required()
+            pricing: Joi.object().pattern(
+                Joi.string(), // Key can be any string (vehicle type)
+                Joi.object({ // Value must be an object with single/double/triple
+                    single: Joi.number().required(),
+                    double: Joi.number().required(),
+                    triple: Joi.number().required()
+                })
+            ).required(),
+            gst: Joi.number().default(18)
         });
         try {
-            const { error, value } = await Joi.validate(req.body, validSchema);
+            const { error, value } = await validSchema.validate(req.body);
             if (error) {
                 throw apiError.badRequest(error.details[0].message);
             }
@@ -249,8 +263,19 @@ class tripRequirementController {
             if (!locationResult) {
                 throw apiError.notFound(responseMessage.DATA_NOT_FOUND);
             }
-            await createTrip(value);
-            return res.json(new response({}, responseMessage.TRIP_CREATED));
+            const checkHotels = await hotelsList({ _id: { $in: value.stays } });
+            if (value.stays.length !== checkHotels.length) {
+                throw apiError.notFound(responseMessage.HOTELS_NOT_FOUND);
+            }
+            const checkVehicels = await findVehicaleList({ _id: { $in: value.vehicles } });
+            if (checkVehicels.length !== value.vehicles.length) {
+                throw apiError.notFound(responseMessage.VEHICLE_NOT_FOUND);
+            }
+            // console.log('value', value)
+            const result = await createTripDetails(value);
+            const tripResult = await findPopulateTrip({ _id: result._id })
+            //    console.log('result', result)
+            return res.json(new response(tripResult, responseMessage.TRIP_CREATED));
         } catch (error) {
             next(error);
         }
@@ -271,7 +296,7 @@ class tripRequirementController {
             _id: Joi.string().required(),
         })
         try {
-            const { error, value } = await Joi.validate(req.query, validSchema);
+            const { error, value } = await validSchema.validate(req.query);
             if (error) {
                 throw apiError.badRequest(error.details[0].message);
             }
@@ -306,7 +331,7 @@ class tripRequirementController {
             }).required()
         });
         try {
-            const { error, value } = await Joi.validate(req.body, validSchema);
+            const { error, value } = await validSchema.validate(req.body);
             if (error) {
                 throw apiError.badRequest(error.details[0].message);
             }
@@ -325,7 +350,7 @@ class tripRequirementController {
             _id: Joi.string().required()
         })
         try {
-            const { error, value } = await Joi.validate(req.body, validSchema);
+            const { error, value } = await validSchema.validate(req.body);
             if (error) {
                 throw apiError.badRequest(error.details[0].message);
             }

@@ -8,10 +8,10 @@ const vehicaleServices = {
         return await vehicaleModel.findOne(query);
     },
     updateVehicale: async (query, updatedObj) => {
-        return await vehicaleModel.update(query, updatedObj, { new: true });
+        return await vehicaleModel.findOneAndUpdate(query, updatedObj, { new: true });
     },
     findVehicaleList: async (query) => {
-        return await vehicaleModel.findAll(query);
+        return await vehicaleModel.find(query);
     }
 }
 

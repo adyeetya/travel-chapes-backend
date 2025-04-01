@@ -22,7 +22,7 @@ class userController {
     });
 
     try {
-      const { error, value } = validSchema.validate(req.body);
+      const { error, value } = await validSchema.validate(req.body);
       if (error) {
         throw apiError.badRequest(error.details[0].message);
       }
@@ -63,7 +63,7 @@ class userController {
       otp: Joi.string().required(),
     });
     try {
-      const { error, value } = validSchema.validate(req.body);
+      const { error, value } = await validSchema.validate(req.body);
       if (error) {
         throw apiError.badRequest(error.details[0].message);
       }
@@ -90,7 +90,10 @@ class userController {
       mobileNumber: Joi.string().optional(),
     });
     try {
-      const value = await Joi.validate(req.body, validSchema); // Validate input
+      const { error, value } = await validSchema.validate(req.body);
+      if (error) {
+        throw apiError.badRequest(error.details[0].message);
+      }
       const userResult = await findUser({ mobileNumber: value.mobileNumber });
       if (!userResult) {
         throw apiError.notFound(responseMessage.USER_NOT_FOUND);
@@ -116,7 +119,10 @@ class userController {
       mobileNumber: Joi.string().required(),
     };
     try {
-      const value = await Joi.validate(req.body, validSchema);
+      const { error, value } = await validSchema.validate(req.body);
+      if (error) {
+        throw apiError.badRequest(error.details[0].message);
+      }
       // console.log(value);
       const userResult = await findUser({ mobileNumber: value.mobileNumber, status: status.active });
       if (!userResult) {
@@ -141,7 +147,10 @@ class userController {
       otp: Joi.string().required()
     }
     try {
-      const value = await Joi.validate(req.body, validSchema);
+      const { error, value } = await validSchema.validate(req.body);
+      if (error) {
+        throw apiError.badRequest(error.details[0].message);
+      }
       const userResult = await findUser({ mobileNumber: value.mobileNumber });
       if (!userResult) {
         throw apiError.notFound(responseMessage.USER_NOT_FOUND);
@@ -168,22 +177,22 @@ class userController {
       if (!authHeader || !authHeader.startsWith("Bearer ")) {
         return res.status(400).send({ responseCode: 400, responseMessage: 'Token required. Please provide a token.' });
       }
-  
+
       const token = authHeader.split(" ")[1]; // Extract the token from "Bearer <token>"
       if (!token) {
         return res.status(400).send({ responseCode: 400, responseMessage: 'Token required. Please provide a token.' });
       }
-  
+
       jwt.verify(token, global.gConfig.jwtsecret, async (err, result) => {
         if (err) {
           return res.status(401).send({ responseCode: 401, responseMessage: 'Unauthorized' });
         }
-  
+
         const userResult = await findUser({ _id: result.userId, status: { $eq: status.active } });
         if (!userResult) {
           return res.status(404).send({ responseCode: 404, responseMessage: 'User not found' });
         }
-  
+
         const obj = {
           name: userResult.name,
           mobileNumber: userResult.mobileNumber,

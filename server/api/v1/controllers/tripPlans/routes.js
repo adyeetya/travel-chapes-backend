@@ -7,11 +7,12 @@ module.exports = Express.Router()
     .post("/submitForm", controller.submitTripForm)
     .get("/tripPlansList", controller.findAlltripPlans)
     .get('/getAllIds', controller.getAllIds)
+    .post("/getAllTripPlans", controller.getAllTripPlans)
+    .get("/viewTripPlan", controller.viewTripPlan)
     .use(auth.verifyToken)
 
     .post("/createTripPlans", controller.createTripPlans)
     .put("/updateTripPlan", controller.updateTripPlan)
-    .post("/getAllTripPlans", controller.getAllTripPlans)
-    .get("/viewTripPlan", controller.viewTripPlan)
+
 
 

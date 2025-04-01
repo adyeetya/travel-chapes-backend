@@ -16,7 +16,7 @@ module.exports = {
 
             // Extract token from "Bearer <token>"
             const token = authHeader.split(' ')[1];
-            console.log('token:', token);
+            // console.log('token:', token);
             
             jwt.verify(token, global.gConfig.jwtsecret, async (err, result) => {
                 if (err) {
@@ -32,8 +32,8 @@ module.exports = {
 
                 }
 
-                console.log('result:', result);
-                console.log('userResult:', userResult);
+                // console.log('result:', result);
+                // console.log('userResult:', userResult);
 
                 // Attach user information to the request object for further use
                 req.userId = result.userId;
