@@ -44,6 +44,47 @@ class customerController {
             next(error);
         }
     }
+    async addPayment(req, res, next) {
+        const validSchema = Joi.object({
+            _id: Joi.string().required(),
+            payment: Joi.object().required()
+        })
+        try {
+            const { error, value } = await validSchema.validate(req.body);
+            if (error) {
+                throw apiError.badRequest(error.details[0].message);
+            }
+            const adminResult = await findAdmin({ _id: req.userId });
+            if (!adminResult) {
+                throw apiError.notAllowed(responseMessage.ADMIN_NOT_FOUND);
+            }
+            const checkCustomer = await findCustomer({ _id: value._id });
+            if (!checkCustomer) {
+                throw apiError.notFound(responseMessage.DATA_NOT_FOUND);
+            }
+            const result = await updateCustomer({ _id: checkCustomer._id }, { $push: { payments: value.payment } });
+            return res.json(new response(result, responseMessage.DATA_SAVED));
+        } catch (error) {
+            console.log(error);
+            next(error);
+        }
+    }
+    async getcustomerList(req, res, next) {
+        try {
+            const adminResult = await findAdmin({ _id: req.userId });
+            if (!adminResult) {
+                throw apiError.notAllowed(responseMessage.ADMIN_NOT_FOUND);
+            }
+            const result = await findCustomerList({});
+            if (result.length == 0) {
+                throw apiError.notFound(responseMessage.DATA_NOT_FOUND);
+            }
+            return res.json(new response(result, responseMessage.DATA_FOUND));
+        } catch (error) {
+            console.log(error);
+            next(error);
+        }
+    }
 }
 
 export default new customerController()

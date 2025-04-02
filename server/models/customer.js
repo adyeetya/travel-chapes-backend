@@ -17,8 +17,14 @@ const customerSchema = new mongoose.Schema({
         type: Number
     },
     payments: [{
-        
-    }]
+        _id: { type: mongoose.Schema.Types.ObjectId, default: () => new mongoose.Types.ObjectId() },
+        amount: { type: Number, required: true },
+        method: { type: String, enum: ["cash", "card", "online"], required: true },
+        transactionId: { type: String, default: "" },
+        receiver: { type: String, required: true },
+        date: { type: Date, required: true },
+        createdAt: { type: Date, default: Date.now },
+    }],
 }, { timestamps: true, collection: "customer" })
 
-module.exports = mongoose.model("customer",customerSchema);
+module.exports = mongoose.model("customer", customerSchema);
