@@ -71,20 +71,31 @@ class customerController {
     }
     async getcustomerList(req, res, next) {
         try {
+            console.log('req:',req)
             const adminResult = await findAdmin({ _id: req.userId });
             if (!adminResult) {
                 throw apiError.notAllowed(responseMessage.ADMIN_NOT_FOUND);
             }
-            const result = await findCustomerList({});
-            if (result.length == 0) {
+    
+            // Check if tripId is provided in request query
+            const query = {};
+           
+            if (req.query.tripId) {
+                query.tripId = req.query.tripId;
+            }
+    
+            const result = await findCustomerList(query);
+            if (result.length === 0) {
                 throw apiError.notFound(responseMessage.DATA_NOT_FOUND);
             }
+    
             return res.json(new response(result, responseMessage.DATA_FOUND));
         } catch (error) {
             console.log(error);
             next(error);
         }
     }
+    
 }
 
 export default new customerController()
