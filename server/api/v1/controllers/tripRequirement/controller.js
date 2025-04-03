@@ -378,8 +378,8 @@ class tripRequirementController {
             if (error) {
                 throw apiError.badRequest(error.details[0].message);
             }
-            const hotelResult = await findTrip({ _id: value._id, isDeleted: false });
-            if (!hotelResult) {
+            const tripResult = await findTrip({ _id: value._id, isDeleted: false });
+            if (!tripResult) {
                 throw apiError.notFound(responseMessage.DATA_NOT_FOUND);
             }
             await updateTrip({ _id: value._id }, { isDeleted: true });
