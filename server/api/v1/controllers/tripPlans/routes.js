@@ -13,6 +13,6 @@ module.exports = Express.Router()
 
     .post("/createTripPlans", controller.createTripPlans)
     .put("/updateTripPlan", controller.updateTripPlan)
-
-
+    .delete("/deleteTripPlan",controller.deleteTripPlan)
+ 
 
