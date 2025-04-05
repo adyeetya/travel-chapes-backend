@@ -17,10 +17,7 @@ const tripSchema = new mongoose.Schema({
     days: { type: Number, required: true },
     itinerary: [{ type: String }],
     vehicles: [{ type: mongoose.Types.ObjectId, ref: "vehicle" }],
-    // vehicles: [{ type: String }],
     stays: [{ type: mongoose.Types.ObjectId, ref: "hotel" }],
-    // need to change stay and vehicel to reference to hotel and vehicle and when returnng the list need to populate the data
-    // stays: [{ type: String }],
     meals: [{ type: String }],
     pricing: {
         type: Map,
