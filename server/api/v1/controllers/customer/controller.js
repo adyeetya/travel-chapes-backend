@@ -78,7 +78,7 @@ class customerController {
             }
 
             // Check if tripId is provided in request query
-            const query = { isDeleted: { $ne: false } };
+            const query = { isDeleted: { $ne: true } };
 
             if (req.query._id) {
                 query.tripId = req.query._id;
@@ -143,7 +143,7 @@ class customerController {
                 throw apiError.notFound(responseMessage.DATA_NOT_FOUND);
             }
             await updateCustomer({ _id: customerResult._id }, { isDeleted: true });
-            return res.json(new response({},responseMessage.DELETE_SUCCESS));
+            return res.json(new response({}, responseMessage.DELETE_SUCCESS));
         } catch (error) {
 
         }

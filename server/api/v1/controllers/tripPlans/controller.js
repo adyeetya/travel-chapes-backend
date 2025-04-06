@@ -39,7 +39,7 @@ class tripPlansController {
             slug: Joi.string().required(),
             name: Joi.string().required(),
             title: Joi.string().optional(),
-           
+
             route: Joi.string().required(),
             duration: Joi.string().optional(),
             category: Joi.array().optional(),
@@ -86,10 +86,10 @@ class tripPlansController {
             if (error) {
                 return next(apiError.badRequest(error.details[0].message)); // Use `next` directly
             }
-            // const adminResult = await findAdmin({ where: { _id: req.userId } });
-            // if (!adminResult) {
-            //     return next(apiError.notFound(responseMessage.ADMIN_NOT_FOUND));
-            // }
+            const adminResult = await findAdmin({ _id: req.userId });
+            if (!adminResult) {
+                return next(apiError.notFound(responseMessage.ADMIN_NOT_FOUND));
+            }
             const checkSlug = await findTripPlans({ slug: value.slug });
             if (checkSlug) {
                 throw apiError.alreadyExist(responseMessage.ALREADY_EXIST);
@@ -154,7 +154,10 @@ class tripPlansController {
             if (error) {
                 return next(apiError.badRequest(error.details[0].message));
             }
-
+            const adminResult = await findAdmin({ _id: req.userId });
+            if (!adminResult) {
+                return next(apiError.notFound(responseMessage.ADMIN_NOT_FOUND));
+            }
             const tripPlan = await findTripPlans({ _id: value._id });
             if (!tripPlan) {
                 return next(apiError.notFound(responseMessage.TRIP_PLAN_NOT_FOUND));
@@ -168,27 +171,18 @@ class tripPlansController {
     }
     async viewTripPlan(req, res, next) {
         try {
-            console.log("req.query", req.query);
-            // Option 1: Get by ID if _id query parameter exists
+            // console.log("req.query", req.query);
             const tripPlanId = req.query._id;
-            
-            // Option 2: Get by slug if slug query parameter exists
             const tripSlug = req.query.slug;
-    
-            // if (!tripPlanId && !tripSlug) {
-            //     return next(apiError.badRequest("Either _id or slug must be provided"));
-            // }
-    
-            // Build query - search by _id OR slug
             const query = {};
             if (tripPlanId) {
                 query._id = tripPlanId;
             } else if (tripSlug) {
                 query.slug = tripSlug;
             }
-    
+
             const tripPlan = await findTripPlans(query);
-            
+
             if (!tripPlan) {
                 return next(apiError.notFound(responseMessage.TRIP_PLAN_NOT_FOUND));
             }
@@ -270,6 +264,29 @@ class tripPlansController {
             const ids = result.docs.map(trip => trip.slug.toString()); // Convert ObjectId to string
 
             return res.json(new response(ids, responseMessage.DATA_FOUND));
+        } catch (error) {
+            next(error);
+        }
+    }
+    async deleteTripPlan(req, res, next) {
+        const validSchema = Joi.object({
+            _id: Joi.string().required()
+        })
+        try {
+            const { error, value } = await validSchema.validate(req.body);
+            if (error) {
+                throw apiError.badRequest(error.details[0].message);
+            }
+            const adminResult = await findAdmin({ _id: req.userId });
+            if (!adminResult) {
+                return next(apiError.notFound(responseMessage.ADMIN_NOT_FOUND));
+            }
+            const tripResult = await findTripPlans({ _id: value._id });
+            if (!tripResult) {
+                throw apiError.notFound(responseMessage.DATA_NOT_FOUND);
+            }
+            await updateTripPlans({ _id: tripResult._id }, { status: { $set: status.delete } });
+            return res.json(new response({}, responseMessage.DATA_SAVED));
         } catch (error) {
             next(error);
         }

@@ -10,9 +10,8 @@ module.exports = Express.Router()
     .post("/getAllTripPlans", controller.getAllTripPlans)
     .get("/viewTripPlan", controller.viewTripPlan)
     .use(auth.verifyToken)
-
     .post("/createTripPlans", controller.createTripPlans)
     .put("/updateTripPlan", controller.updateTripPlan)
-
-
+    .delete("/deleteTripPlan",controller.deleteTripPlan)
+ 
 
