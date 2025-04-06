@@ -21,10 +21,14 @@ const customerSchema = new mongoose.Schema({
         amount: { type: Number, required: true },
         method: { type: String, enum: ["cash", "online"], required: true },
         transactionId: { type: String, default: "" },
-        receiver: { type: String, default: ""  },
+        receiver: { type: String, default: "" },
 
-        
+
     }],
+    isDeleted: {
+        type: Boolean,
+        default: false
+    }
 }, { timestamps: true, collection: "customer" })
 
 module.exports = mongoose.model("customer", customerSchema);

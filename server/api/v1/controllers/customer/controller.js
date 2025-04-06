@@ -76,27 +76,78 @@ class customerController {
             if (!adminResult) {
                 throw apiError.notAllowed(responseMessage.ADMIN_NOT_FOUND);
             }
-    
+
             // Check if tripId is provided in request query
-            const query = {};
-           
+            const query = { isDeleted: { $ne: false } };
+
             if (req.query._id) {
                 query.tripId = req.query._id;
-                
+
             }
-    
+
             const result = await findCustomerList(query);
             if (result.length === 0) {
                 throw apiError.notFound(responseMessage.DATA_NOT_FOUND);
             }
-    
+
             return res.json(new response(result, responseMessage.DATA_FOUND));
         } catch (error) {
             console.log(error);
             next(error);
         }
     }
-    
+    async updateCustomer(req, res, next) {
+        const validSchema = Joi.object({
+            _id: Joi.string().required(),
+            tripId: Joi.string().required(),
+            name: Joi.string().required(),
+            contact: Joi.string().required(),
+            agreedPrice: Joi.number().required(),
+            numOfPeople: Joi.number().required(),
+            payments: Joi.array().optional()
+        })
+        try {
+            const { error, value } = await validSchema.validate(req.body);
+            if (error) {
+                throw apiError.badRequest(error.details[0].message);
+            }
+            const adminResult = await findAdmin({ _id: req.userId });
+            if (!adminResult) {
+                throw apiError.notAllowed(responseMessage.ADMIN_NOT_FOUND);
+            }
+            const customerResult = await findCustomer({ _id: value._id });
+            if (!customerResult) {
+                throw apiError.notFound(responseMessage.DATA_NOT_FOUND);
+            }
+            await updateCustomer({ _id: customerResult._id }, value);
+            return res.json(new response({}, responseMessage.DATA_SAVED));
+        } catch (error) {
+
+        }
+    }
+    async deleteCustomer(req, res, next) {
+        const validSchema = Joi.object({
+            _id: Joi.string().required()
+        })
+        try {
+            const { error, value } = await validSchema.validate(req.body);
+            if (error) {
+                throw apiError.badRequest(error.details[0].message);
+            }
+            const adminResult = await findAdmin({ _id: req.userId });
+            if (!adminResult) {
+                throw apiError.notAllowed(responseMessage.ADMIN_NOT_FOUND);
+            }
+            const customerResult = await findCustomer({ _id: value._id });
+            if (!customerResult) {
+                throw apiError.notFound(responseMessage.DATA_NOT_FOUND);
+            }
+            await updateCustomer({ _id: customerResult._id }, { isDeleted: true });
+            return res.json(new response({},responseMessage.DELETE_SUCCESS));
+        } catch (error) {
+
+        }
+    }
 }
 
 export default new customerController()

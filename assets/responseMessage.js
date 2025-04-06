@@ -29,5 +29,6 @@ module.exports = {
     ALREADY_EXIST:"Slug already exist.",
     HOTEL_CREATED:"Hotel created successfully.",
     HOTELS_NOT_FOUND:"Hotels not found.",
-    VEHICLE_NOT_FOUND:"Vehicle not found."
+    VEHICLE_NOT_FOUND:"Vehicle not found.",
+    DELETE_SUCCESS:"Data deleted successfully."
 }
