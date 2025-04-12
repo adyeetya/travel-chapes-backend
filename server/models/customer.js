@@ -22,8 +22,6 @@ const customerSchema = new mongoose.Schema({
         method: { type: String, enum: ["cash", "online"], required: true },
         transactionId: { type: String, default: "" },
         receiver: { type: String, default: "" },
-
-
     }],
     isDeleted: {
         type: Boolean,

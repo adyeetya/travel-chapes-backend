@@ -33,8 +33,11 @@
     "awsS3": {
       "accessKeyId": "AKIA6ODVAFDB2G2VEI3H",
       "accessKey": "QXi3OborNM9J7JvDkF7juqPtiJhWLL4tdLysYoQc"
+    },
+    "razorPay": {
+      "keyId": "rzp_test_HTcXLxTOzRn3DB",
+      "keySecret": "vC06CcBzp3odrJEWYnMHPi2Q"
     }
-
   },
   "staging": {
     "config_id": "staging",
@@ -70,6 +73,10 @@
     "awsS3": {
       "accessKeyId": "AKIA6ODVAFDB2G2VEI3H",
       "accessKey": "QXi3OborNM9J7JvDkF7juqPtiJhWLL4tdLysYoQc"
+    },
+    "razorPay": {
+      "keyId": "rzp_test_HTcXLxTOzRn3DB",
+      "keySecret": "vC06CcBzp3odrJEWYnMHPi2Q"
     }
   },
   "production": {
@@ -105,7 +112,10 @@
     "awsS3": {
       "accessKeyId": "AKIA6ODVAFDB2G2VEI3H",
       "accessKey": "QXi3OborNM9J7JvDkF7juqPtiJhWLL4tdLysYoQc"
-
+    },
+    "razorPay":{
+      "keyId":"rzp_test_HTcXLxTOzRn3DB",
+      "keySecret":"vC06CcBzp3odrJEWYnMHPi2Q"
     }
   }
 }

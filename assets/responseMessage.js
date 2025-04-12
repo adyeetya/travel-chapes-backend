@@ -5,7 +5,6 @@ module.exports = {
     EMAIL_EXIST: "Email already exist",
     MOBILE_EXIST: 'Mobile number already exist',
     EMAIL_MOBILE_EXIST: "Email or mobile number already exist",
-    USER_NOT_FOUND: 'User not found',
     OTP_EXPIRED: 'Otp expired',
     INVALID_OTP: 'Invalid Otp',
     OTP_VERIFIED: 'Otp verified successfully',
@@ -24,11 +23,21 @@ module.exports = {
     SOMETHINGWENT_WRONG: "Something went wrong please try again later.",
     DATA_SAVED: "Details saved successfully",
     UPLOAD_SUCCESS: "File uploaded successfully",
-    QUERY_SAVED:"Your query has been successfully saved.",
-    LOCATION_CREATED:"Location created successfully.",
-    ALREADY_EXIST:"Slug already exist.",
-    HOTEL_CREATED:"Hotel created successfully.",
-    HOTELS_NOT_FOUND:"Hotels not found.",
-    VEHICLE_NOT_FOUND:"Vehicle not found.",
-    DELETE_SUCCESS:"Data deleted successfully."
-}
+    QUERY_SAVED: "Your query has been successfully saved.",
+    LOCATION_CREATED: "Location created successfully.",
+    ALREADY_EXIST: "Slug already exist.",
+    HOTEL_CREATED: "Hotel created successfully.",
+    HOTELS_NOT_FOUND: "Hotels not found.",
+    VEHICLE_NOT_FOUND: "Vehicle not found.",
+    DELETE_SUCCESS: "Data deleted successfully.",
+    
+    // 🔐 Payment-related messages
+    ORDER_CREATED: "Order created successfully.",
+    PAYMENT_SUCCESS: "Payment completed successfully.",
+    PAYMENT_FAILED: "Payment failed.",
+    INVALID_SIGNATURE: "Invalid payment signature.",
+    PAYMENT_ALREADY_VERIFIED: "Payment already verified.",
+    REFUND_SUCCESS: "Refund processed successfully.",
+    REFUND_FAILED: "Refund failed.",
+    PAYMENT_NOT_FOUND: "Payment not found.",
+};
