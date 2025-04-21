@@ -11,10 +11,10 @@ const customerServices = {
         return await customerModel.findOneAndUpdate(query, updatedObj, { new: true });
     },
     findCustomerList: async (query) => {
-        return await customerModel.find(query).populate([{ path: "tripId" }])
+        return await customerModel.find(query).populate([{ path: "tripId" }, { path: "createdBy", select: "email mobileNumber" }])
     },
     findPopulatedCustomer: async (query) => {
-        return await customerModel.findOne(query).populate([{ path: "tripId" }])
+        return await customerModel.findOne(query).populate([{ path: "tripId" }, { path: "createdBy", select: "email mobileNumber" }])
     }
 }
 

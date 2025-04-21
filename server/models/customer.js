@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Mongoose } from "mongoose";
 const customerSchema = new mongoose.Schema({
     tripId: {
         type: mongoose.Types.ObjectId,
@@ -26,6 +26,10 @@ const customerSchema = new mongoose.Schema({
     isDeleted: {
         type: Boolean,
         default: false
+    },
+    createdBy: {
+        type: mongoose.Types.ObjectId,
+        ref: "Admin"
     }
 }, { timestamps: true, collection: "customer" })
 

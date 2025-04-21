@@ -36,6 +36,7 @@ class customerController {
             if (!checkTrip) {
                 throw apiError.notFound(responseMessage.DATA_NOT_FOUND);
             }
+            value.createdBy = adminResult._id;
             const cres = await createCustomer(value);
             const result = await findPopulatedCustomer({ _id: cres._id });
             return res.json(new response(result, responseMessage.DATA_SAVED));
