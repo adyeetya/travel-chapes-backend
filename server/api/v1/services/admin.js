@@ -9,6 +9,9 @@ const adminServices = {
     findAdminByuserId: async (query) => {
         return await adminModel.findOne(query);
     },
+    findAdmins: async (query) => {
+        return await adminModel.findAll(query);
+    },
     updateAdmin: async (query, obj) => {
         return await adminModel.updateOne(query, obj, { new: true })
     },

@@ -30,7 +30,7 @@ module.exports = {
     HOTELS_NOT_FOUND: "Hotels not found.",
     VEHICLE_NOT_FOUND: "Vehicle not found.",
     DELETE_SUCCESS: "Data deleted successfully.",
-    
+
     // 🔐 Payment-related messages
     ORDER_CREATED: "Order created successfully.",
     PAYMENT_SUCCESS: "Payment completed successfully.",
@@ -40,4 +40,6 @@ module.exports = {
     REFUND_SUCCESS: "Refund processed successfully.",
     REFUND_FAILED: "Refund failed.",
     PAYMENT_NOT_FOUND: "Payment not found.",
+    SUBADMIN_CREATED: (userType) => `Subadmin created with ${userType} role.`,
+    UPDATE_SUCCESS:"Data updated successfully."
 };
