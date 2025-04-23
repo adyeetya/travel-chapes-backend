@@ -7,9 +7,9 @@ const options = {
 }
 const tripPlanSchema = new mongoose.Schema({
     slug: { type: String, required: true },
-    name: { type: String, required: true },
+  
     
-    title: { type: String },
+    title: { type: String, required: true },
     route: { type: String },
     duration: { type: String },
     category: { type: Array },
