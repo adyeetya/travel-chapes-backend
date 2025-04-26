@@ -1,27 +1,26 @@
 import mongoose, { Mongoose } from "mongoose";
 const customerSchema = new mongoose.Schema({
-    tripId: {
-        type: mongoose.Types.ObjectId,
-        ref: 'trip'
-    },
     name: {
-        type: String
+        type: String,
+        required: true,
+        trim: true
     },
     contact: {
-        type: String
+        type: String,
+        required: true,
+        trim: true,
+        validate: {
+            validator: function(v) {
+                // Basic international phone number validation
+                // Allows optional + prefix, numbers, and some special characters
+                return /^[+]?[(]?[0-9]{1,4}[)]?[-\s./0-9]{7,15}$/.test(v);
+            },
+            message: props => `${props.value} is not a valid phone number!`
+        }
     },
-    agreedPrice: {
-        type: Number
-    },
-    numOfPeople: {
-        type: Number
-    },
-    payments: [{
-        _id: { type: mongoose.Schema.Types.ObjectId, default: () => new mongoose.Types.ObjectId() },
-        amount: { type: Number, required: true },
-        method: { type: String, enum: ["cash", "online"], required: true },
-        transactionId: { type: String, default: "" },
-        receiver: { type: String, default: "" },
+    bookings: [{
+        type: mongoose.Types.ObjectId,
+        ref: 'booking'
     }],
     isDeleted: {
         type: Boolean,
@@ -31,6 +30,6 @@ const customerSchema = new mongoose.Schema({
         type: mongoose.Types.ObjectId,
         ref: "Admin"
     }
-}, { timestamps: true, collection: "customer" })
+}, { timestamps: true, collection: "customer" });
 
 module.exports = mongoose.model("customer", customerSchema);
