@@ -30,7 +30,7 @@ class adminController {
             if (!adminResult) {
                 throw apiError.notFound(responseMessage.ADMIN_NOT_FOUND);
             }
-            console.log(adminResult)
+            // console.log(adminResult)
             if (!commonFunction.compareHash(password, adminResult.hashedPassword)) {
                 throw apiError.invalid(responseMessage.INCORRECT_PASSWORD);
             }

@@ -306,7 +306,7 @@ class tripRequirementController {
   async tripList(req, res, next) {
     try {
       const result = await findTripList({ isDeleted: false });
-      console.log("result", result);
+      // console.log("result", result);
       if (result.length == 0) {
         throw apiError.notFound(responseMessage.DATA_NOT_FOUND);
       }

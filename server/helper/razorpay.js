@@ -1,7 +1,5 @@
 import Razorpay from 'razorpay';
 import "../../config/config";
-console.log(global.gConfig.razorPay);
-
 const razorpay = new Razorpay({
     key_id: global.gConfig.razorPay.keyId,
     key_secret: global.gConfig.razorPay.keySecret,

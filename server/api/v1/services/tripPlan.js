@@ -32,6 +32,9 @@ const tripPlanServices = {
             sort: { createdAt: -1 }
         }
         return tripPlanModel.paginate(query, options)
+    },
+    getTripPlanCategories: async(query)=>{
+        return await tripPlanModel.find(query).select('category');''
     }
 }
 

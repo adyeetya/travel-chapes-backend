@@ -12,7 +12,7 @@ import { tripFormServices } from "../../services/tripForm";
 const { findAdmin } = adminServices
 const { findUser } = userServices;
 const { createTripFrom } = tripFormServices
-const { createTripPlans, findAlltripPlans, findTripPlans, updateTripPlans } = tripPlanServices;
+const { createTripPlans, findAlltripPlans, findTripPlans, updateTripPlans, getTripPlanCategories } = tripPlanServices;
 
 class tripPlansController {
     async findAlltripPlans(req, res, next) {
@@ -189,6 +189,18 @@ class tripPlansController {
             return res.json(new response(tripPlan, responseMessage.DATA_FOUND));
         } catch (err) {
             next(err);
+        }
+    }
+
+    async getTriplPlanCategory(req, res, next) {
+        try {
+            const result = await getTripPlanCategories({ status: { $ne: status.delete } });
+            if (result.length == 0) {
+                throw apiError.notFound(responseMessage.DATA_NOT_FOUND);
+            }
+            return res.json(new response(result, responseMessage.DATA_FOUND));
+        } catch (error) {
+            next(error);
         }
     }
     async getAllTripPlans(req, res, next) {
