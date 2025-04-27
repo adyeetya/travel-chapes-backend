@@ -316,15 +316,21 @@ class tripRequirementController {
     }
   }
   async viewTrip(req, res, next) {
-    const validSchema = Joi.object({
-      _id: Joi.string().required(),
-    });
+   
     try {
-      const { error, value } = await validSchema.validate(req.query);
-      if (error) {
-        throw apiError.badRequest(error.details[0].message);
+      // const { error, value } = await validSchema.validate(req.query);
+      // if (error) {
+      //   throw apiError.badRequest(error.details[0].message);
+      // }
+      const tripPlanId = req.query._id;
+      const tripSlug = req.query.slug;
+      const query = {};
+      if (tripPlanId) {
+          query._id = tripPlanId;
+      } else if (tripSlug) {
+          query.slug = tripSlug;
       }
-      const tripResult = await findTrip({ _id: value._id });
+      const tripResult = await findTrip(query);
       if (!tripResult) {
         throw apiError.notFound(responseMessage.DATA_NOT_FOUND);
       }

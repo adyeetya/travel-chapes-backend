@@ -14,7 +14,7 @@ const adminSchema = new mongoose.Schema({
     { timestamps: true, collection: 'Admin' }
 );
 
-const admin = mongoose.model('admin', adminSchema);
+const admin = mongoose.model('Admin', adminSchema);
 
 async function defaultAdmin() {
     try {

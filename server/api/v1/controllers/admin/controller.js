@@ -25,7 +25,7 @@ class adminController {
             let { email, password } = value;
 
             email = email.toLowerCase();
-            let query = { $and: [{ adminType: { $in: [userType.admin, userType.subAdmin] } }, { email: { $regex: new RegExp("^" + email + "$", "i") } }, { status: { $eq: status.active } }] }
+            let query = { $and: [{ adminType: { $in: [userType.admin, userType.subAdmin,userType.CONTENT,userType.SALES] } }, { email: { $regex: new RegExp("^" + email + "$", "i") } }, { status: { $eq: status.active } }] }
             const adminResult = await findAdmin(query);
             if (!adminResult) {
                 throw apiError.notFound(responseMessage.ADMIN_NOT_FOUND);
@@ -119,7 +119,9 @@ class adminController {
             // console.log(file);
             const buketName = 'travelchapes';
             const key = req.body.keyId;
+            
             const result = await uploadFileToS3(file[0].path, buketName, key, file[0].filename);
+            console.log('url', result.url)
             if (!result) {
                 throw apiError.internal(responseMessage.SOMETHINGWENT_WRONG);
             }

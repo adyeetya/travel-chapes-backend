@@ -37,8 +37,8 @@ class tripPlansController {
     async createTripPlans(req, res, next) {
         const validSchema = Joi.object({
             slug: Joi.string().required(),
-            name: Joi.string().required(),
-            title: Joi.string().optional(),
+           
+            title: Joi.string().required(),
 
             route: Joi.string().required(),
             duration: Joi.string().optional(),
@@ -82,7 +82,9 @@ class tripPlansController {
         });
 
         try {
+            console.log('req', req.body)
             const { error, value } = validSchema.validate(req.body);
+            console.log('value', value)
             if (error) {
                 return next(apiError.badRequest(error.details[0].message)); // Use `next` directly
             }
