@@ -41,5 +41,6 @@ module.exports = {
     REFUND_FAILED: "Refund failed.",
     PAYMENT_NOT_FOUND: "Payment not found.",
     SUBADMIN_CREATED: (userType) => `Subadmin created with ${userType} role.`,
-    UPDATE_SUCCESS:"Data updated successfully."
+    UPDATE_SUCCESS:"Data updated successfully.",
+    PAYMENT_INITATED:"You can't update this details because your payment intiated for this trip."
 };

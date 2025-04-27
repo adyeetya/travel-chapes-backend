@@ -8,12 +8,13 @@ const { findAdmin } = adminServices;
 import { tripServices } from "../../services/trip";
 const { findTrip } = tripServices;
 import { customerServices } from "../../services/customer";
-const { 
-    createCustomer, 
-    findCustomer, 
-    updateCustomer, 
-    findCustomerList, 
-    findPopulatedCustomer 
+import mongoose from "mongoose";
+const {
+    createCustomer,
+    findCustomer,
+    updateCustomer,
+    findCustomerList,
+    findPopulatedCustomer
 } = customerServices;
 
 class customerController {
@@ -40,7 +41,6 @@ class customerController {
             value.createdBy = adminResult._id;
             const customer = await createCustomer(value);
             const result = await findPopulatedCustomer({ _id: customer._id });
-            
             return res.json(new response(result, responseMessage.DATA_SAVED));
         } catch (error) {
             next(error);
@@ -86,16 +86,12 @@ class customerController {
             if (!adminResult) {
                 throw apiError.notAllowed(responseMessage.ADMIN_NOT_FOUND);
             }
-    
-            const query = { 
-                isDeleted: { $ne: true },
-                ...(req.query._id && { tripId: req.query._id }) // Match frontend's tripId query
-            };
-    
-            const result = await findCustomerList(query)
-                .populate('bookings')
-                .populate('createdBy', 'name email');
-    
+
+            const query = { isDeleted: { $ne: true } };
+            if (req.query._id) {
+                query.tripId = new mongoose.Types.ObjectId(req.query._id);
+            }
+            const result = await findCustomerList(query);
             return res.json(new response(result, responseMessage.DATA_FOUND));
         } catch (error) {
             next(error);

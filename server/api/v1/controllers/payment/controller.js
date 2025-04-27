@@ -146,7 +146,7 @@ class paymentController {
                         payment_date: new Date()
                     }
                 );
-
+                await updateBooking({ _id: payment.bookingId }, { paymentStatus: "faild" })
                 return res.json({
                     status: "failure",
                     message: responseMessage.PAYMENT_FAILED,

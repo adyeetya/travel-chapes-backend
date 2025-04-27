@@ -5,18 +5,14 @@ const customerSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
+    tripId:{
+        type: mongoose.Types.ObjectId,
+        ref:"trip"
+    },
     contact: {
         type: String,
         required: true,
-        trim: true,
-        validate: {
-            validator: function(v) {
-                // Basic international phone number validation
-                // Allows optional + prefix, numbers, and some special characters
-                return /^[+]?[(]?[0-9]{1,4}[)]?[-\s./0-9]{7,15}$/.test(v);
-            },
-            message: props => `${props.value} is not a valid phone number!`
-        }
+        trim: true
     },
     bookings: [{
         type: mongoose.Types.ObjectId,
