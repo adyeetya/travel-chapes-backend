@@ -1,31 +1,37 @@
 import mongoose, { Mongoose } from "mongoose";
 const customerSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        required: true,
-        trim: true
-    },
-    tripId:{
+    tripId: {
         type: mongoose.Types.ObjectId,
-        ref:"trip"
+        ref: 'trip'
+    },
+    createdBy: {
+        type: mongoose.Types.ObjectId,
+        ref: "Admin"
+    },
+    name: {
+        type: String
     },
     contact: {
-        type: String,
-        required: true,
-        trim: true
+        type: String
     },
-    bookings: [{
-        type: mongoose.Types.ObjectId,
-        ref: 'booking'
+    agreedPrice: {
+        type: Number
+    },
+    numOfPeople: {
+        type: Number
+    },
+    payments: [{
+        _id: { type: mongoose.Schema.Types.ObjectId, default: () => new mongoose.Types.ObjectId() },
+        amount: { type: Number, required: true },
+        method: { type: String, enum: ["cash", "online"], required: true },
+        transactionId: { type: String, default: "" },
+        receiver: { type: String, default: "" },
     }],
     isDeleted: {
         type: Boolean,
         default: false
     },
-    createdBy: {
-        type: mongoose.Types.ObjectId,
-        ref: "Admin"
-    }
-}, { timestamps: true, collection: "customer" });
+   
+}, { timestamps: true, collection: "customer" })
 
 module.exports = mongoose.model("customer", customerSchema);

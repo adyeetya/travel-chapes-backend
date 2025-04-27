@@ -11,7 +11,7 @@ import { bookingServices } from "../../services/booking";
 const { findBooking, updateBooking } = bookingServices
 import { paymentServices } from "../../services/payment";
 const { createPayment, findPayment, updatePayment } = paymentServices;
-import { createRazorpayOrder, fetchOrderDetails ,fetchPaymentDetails} from "../../../../helper/razorpay";
+import { createRazorpayOrder, fetchOrderDetails, fetchPaymentDetails } from "../../../../helper/razorpay";
 
 class paymentController {
     async createOrder(req, res, next) {
@@ -68,7 +68,7 @@ class paymentController {
                 bookingId: value.bookingId,
                 razorpay_response: razorpayOrder
             });
-
+            await updateBooking({ _id: booking._id }, { isPaymentInitated: true });
             return res.json(new response({
                 order: razorpayOrder,
                 paymentId: payment._id
