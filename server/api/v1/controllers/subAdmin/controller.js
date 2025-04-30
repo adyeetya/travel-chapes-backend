@@ -16,7 +16,7 @@ class subAdminController {
             email: Joi.string().required(),
             mobileNumber: Joi.string().required(),
             password: Joi.string().required(),
-            adminType: Joi.string().value(userType.CONTENT, userType.SALES).required()
+            adminType: Joi.string().valid(userType.CONTENT, userType.SALES).required()
         });
         try {
             const { error, value } = await validSchema.validate(req.body);

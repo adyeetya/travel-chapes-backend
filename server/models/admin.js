@@ -6,7 +6,7 @@ const adminSchema = new mongoose.Schema({
     mobileNumber: { type: String, required: true, unique: true },
     hashedPassword: { type: String, required: true },
     isEmailVerified: { type: Boolean, default: false },
-    adminType: { type: String, default: userType.admin, enum: [userType.subAdmin, userType.admin] },
+    adminType: { type: String, default: userType.admin, enum: [userType.subAdmin, userType.admin,userType.CONTENT,userType.SALES] },
     status: { type: String, default: status.active, enum: [status.active, status.delete, status.block] },
     otp: { type: String },
     otpTime: { type: Date },

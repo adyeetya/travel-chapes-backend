@@ -10,7 +10,7 @@ const adminServices = {
         return await adminModel.findOne(query);
     },
     findAdmins: async (query) => {
-        return await adminModel.findAll(query);
+        return await adminModel.find(query);
     },
     updateAdmin: async (query, obj) => {
         return await adminModel.updateOne(query, obj, { new: true })
