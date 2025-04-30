@@ -12,7 +12,7 @@ import { tripFormServices } from "../../services/tripForm";
 const { findAdmin } = adminServices
 const { findUser } = userServices;
 const { createTripFrom } = tripFormServices
-const { createTripPlans, findAlltripPlans, findTripPlans, updateTripPlans, getTripPlanCategories } = tripPlanServices;
+const { createTripPlans, findAlltripPlans, findTripPlans, updateTripPlans, getTripPlanCategories, getTripPlans } = tripPlanServices;
 
 class tripPlansController {
     async findAlltripPlans(req, res, next) {
@@ -37,7 +37,7 @@ class tripPlansController {
     async createTripPlans(req, res, next) {
         const validSchema = Joi.object({
             slug: Joi.string().required(),
-           
+
             title: Joi.string().required(),
 
             route: Joi.string().required(),
@@ -301,6 +301,25 @@ class tripPlansController {
             }
             await updateTripPlans({ _id: tripResult._id }, { status: { $set: status.delete } });
             return res.json(new response({}, responseMessage.DATA_SAVED));
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async getFullIntenriesBySlug(req, res, next) {
+        const validSchema = Joi.object({
+            slug: Joi.string().required()
+        })
+        try {
+            const { error, value } = await validSchema.validate(req.query);
+            if (error) {
+                throw apiError.badRequest(error.details[0].message);
+            }
+            const result = await getTripPlans({ slug: value.slug });
+            if (!result || result.length == 0) {
+                throw apiError.notFound(responseMessage.DATA_NOT_FOUND);
+            }
+            return res.json(new response(result, responseMessage.DATA_FOUND));
         } catch (error) {
             next(error);
         }

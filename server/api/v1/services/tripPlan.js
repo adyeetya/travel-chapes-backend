@@ -11,6 +11,9 @@ const tripPlanServices = {
     updateTripPlans: async (query, updatedObj) => {
         return await tripPlanModel.update(query, updatedObj, { new: true });
     },
+    getTripPlans: async(query)=>{
+        return await tripPlanModel.find(query).select('fullItinerary');
+    },
     findAlltripPlans: async (validateBody) => {
         let query = { status: { $eq: status.active } }
         let { page, limit, category, startDate, endDate } = validateBody;
