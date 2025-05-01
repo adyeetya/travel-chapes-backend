@@ -124,7 +124,7 @@ class subAdminController {
             if (!result) {
                 throw apiError.notFound(responseMessage.DATA_NOT_FOUND);
             }
-            await updateAdmin({ _id: value._id }, { status: { $set: status.delete } });
+            await updateAdmin({ _id: value._id }, { status: status.delete });
             return res.json(new response({}, responseMessage.DELETE_SUCCESS));
         } catch (error) {
             next(error);
