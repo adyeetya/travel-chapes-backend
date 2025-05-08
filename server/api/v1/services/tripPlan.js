@@ -15,8 +15,11 @@ const tripPlanServices = {
         return await tripPlanModel.find(query).select('fullItinerary');
     },
     findAlltripPlans: async (validateBody) => {
+        // console.log("validateBody", validateBody);
         let query = { status: { $eq: status.active } }
+        // console.log("query", query);
         let { page, limit, category, startDate, endDate } = validateBody;
+        // console.log("validateBody", validateBody);
         if (category) {
             query.category = { $in: [category] };
         }
@@ -34,6 +37,7 @@ const tripPlanServices = {
             limit: Number(limit) || 4,
             sort: { createdAt: -1 }
         }
+        // console.log("query", query);
         return tripPlanModel.paginate(query, options)
     },
     getTripPlanCategories: async(query)=>{

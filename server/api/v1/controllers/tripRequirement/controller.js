@@ -306,17 +306,18 @@ class tripRequirementController {
   async tripList(req, res, next) {
     try {
       const result = await findTripList({ isDeleted: false });
-      // console.log("result", result);
-      if (result.length == 0) {
+      
+      if (!result || result.length == 0) {
         throw apiError.notFound(responseMessage.DATA_NOT_FOUND);
       }
+      
       return res.json(new response(result, responseMessage.DATA_FOUND));
     } catch (error) {
       next(error);
     }
   }
   async viewTrip(req, res, next) {
-   
+
     try {
       // const { error, value } = await validSchema.validate(req.query);
       // if (error) {
@@ -326,9 +327,9 @@ class tripRequirementController {
       const tripSlug = req.query.slug;
       const query = {};
       if (tripPlanId) {
-          query._id = tripPlanId;
+        query._id = tripPlanId;
       } else if (tripSlug) {
-          query.slug = tripSlug;
+        query.slug = tripSlug;
       }
       const tripResult = await findTrip(query);
       if (!tripResult) {

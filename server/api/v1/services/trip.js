@@ -35,6 +35,10 @@ const tripServices = {
             .populate("stays")
             .populate("locationId");
         
+        if (!trips || trips.length === 0) {
+            return [];
+        }
+        
         const tripsWithCustomerCount = await Promise.all(
             trips.map(async (trip) => {
                 const customerCount = await customerModel.countDocuments({ tripId: trip._id });
@@ -57,7 +61,6 @@ const tripServices = {
             })
         );
         
-        // console.log('tripsWithCustomerCount', tripsWithCustomerCount);
         return tripsWithCustomerCount;
     },
     findPopulateTrip: async (query) => {

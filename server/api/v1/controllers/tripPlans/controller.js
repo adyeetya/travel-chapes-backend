@@ -81,9 +81,9 @@ class tripPlansController {
         });
 
         try {
-            console.log('req', req.body)
+            // console.log('req', req.body)
             const { error, value } = validSchema.validate(req.body);
-            console.log('value', value)
+            // console.log('value', value)
             if (error) {
                 return next(apiError.badRequest(error.details[0].message)); // Use `next` directly
             }
@@ -207,6 +207,7 @@ class tripPlansController {
     async getAllTripPlans(req, res, next) {
         try {
             const validatedBody = req.body;
+            // console.log("validatedBody in controller", validatedBody);
             const tripPlans = await findAlltripPlans(validatedBody);
             return res.json(new response(tripPlans, responseMessage.DATA_FOUND));
         } catch (err) {
@@ -266,11 +267,14 @@ class tripPlansController {
 
     async getAllIds(req, res, next) {
         try {
+            // console.log("req.body in controller", req.body);
+            const validatedBody = req.body;
+            // console.log("validatedBody", validatedBody);
             const result = await findAlltripPlans({
-                query: {},
+                ...validatedBody,
                 projection: { slug: 1 }
             });
-
+            // console.log("result ids", result);
             if (!result.docs || result.docs.length === 0) {
                 throw apiError.notFound(responseMessage.DATA_NOT_FOUND);
             }
