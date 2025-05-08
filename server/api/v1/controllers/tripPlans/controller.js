@@ -1,4 +1,3 @@
-
 import Joi from "joi";
 import apiError from "../../../../helper/apiError";
 import response from "../../../../../assets/response";
@@ -299,7 +298,7 @@ class tripPlansController {
             if (!tripResult) {
                 throw apiError.notFound(responseMessage.DATA_NOT_FOUND);
             }
-            await updateTripPlans({ _id: tripResult._id }, { status: { $set: status.delete } });
+            await updateTripPlans({ _id: tripResult._id }, { $set: { status: status.delete } });
             return res.json(new response({}, responseMessage.DATA_SAVED));
         } catch (error) {
             next(error);

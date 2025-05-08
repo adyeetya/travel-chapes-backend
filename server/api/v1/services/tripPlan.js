@@ -9,7 +9,7 @@ const tripPlanServices = {
         return await tripPlanModel.findOne(query);
     },
     updateTripPlans: async (query, updatedObj) => {
-        return await tripPlanModel.update(query, updatedObj, { new: true });
+        return await tripPlanModel.updateOne(query, updatedObj, { new: true });
     },
     getTripPlans: async(query)=>{
         return await tripPlanModel.find(query).select('fullItinerary');
