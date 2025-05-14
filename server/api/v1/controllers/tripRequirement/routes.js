@@ -5,6 +5,7 @@ import auth from "../../../../helper/auth";
 export default express
   .Router()
   .get("/viewTrip", controller.viewTrip)
+  .get("/viewAllTrips", controller.viewAllTrips)
   .use(auth.verifyToken)
   .get("/getTripList", controller.tripList)
   .get("/getLocationList", controller.locationList)

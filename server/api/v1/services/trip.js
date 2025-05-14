@@ -7,7 +7,11 @@ const tripServices = {
         return await tripModel.create(insertObj);
     },
     findTrip: async (query) => {
+        // console.log('query', query);
         return await tripModel.findOne(query);
+    },
+    findTrips: async (query) => {
+        return await tripModel.find(query);
     },
     updateTrip: async (query, updatedObj) => {
         return await tripModel.findOneAndUpdate(query, updatedObj, { new: true });
