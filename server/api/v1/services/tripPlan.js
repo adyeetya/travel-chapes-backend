@@ -14,12 +14,37 @@ const tripPlanServices = {
     getTripPlans: async(query)=>{
         return await tripPlanModel.find(query).select('fullItinerary');
     },
+    // findAlltripPlans: async (validateBody) => {
+    //     // console.log("validateBody", validateBody);
+    //     let query = { status: { $eq: status.active } }
+    //     // console.log("query", query);
+    //     let { page, limit, category, startDate, endDate } = validateBody;
+    //     // console.log("validateBody", validateBody);
+    //     if (category) {
+    //         query.category = { $in: [category] };
+    //     }
+    //     if (startDate || endDate) {
+    //         query.createdAt = {};
+    //         if (startDate) {
+    //             query.createdAt.$gte = new Date(startDate);
+    //         }
+    //         if (endDate) {
+    //             query.createdAt.$lte = new Date(endDate);
+    //         }
+    //     }
+    //     let options = {
+    //         page: Number(page) || 1,
+    //         limit: Number(limit) || 4,
+    //         sort: { createdAt: -1 }
+    //     }
+    //     // console.log("query", query);
+    //     return tripPlanModel.paginate(query, options)
+    // },
+
     findAlltripPlans: async (validateBody) => {
-        // console.log("validateBody", validateBody);
         let query = { status: { $eq: status.active } }
-        // console.log("query", query);
-        let { page, limit, category, startDate, endDate } = validateBody;
-        // console.log("validateBody", validateBody);
+        let { category, startDate, endDate } = validateBody;
+        
         if (category) {
             query.category = { $in: [category] };
         }
@@ -32,13 +57,23 @@ const tripPlanServices = {
                 query.createdAt.$lte = new Date(endDate);
             }
         }
-        let options = {
-            page: Number(page) || 1,
-            limit: Number(limit) || 4,
-            sort: { createdAt: -1 }
-        }
-        // console.log("query", query);
-        return tripPlanModel.paginate(query, options)
+        
+        // Get all documents sorted by createdAt in descending order
+        const docs = await tripPlanModel.find(query).sort({ createdAt: -1 });
+        
+        // Return in same structure as pagination but with all data
+        return {
+            docs,
+            totalDocs: docs.length,
+            limit: docs.length,
+            totalPages: 1,
+            page: 1,
+            pagingCounter: 1,
+            hasPrevPage: false,
+            hasNextPage: false,
+            prevPage: null,
+            nextPage: null
+        };
     },
     getTripPlanCategories: async(query)=>{
         return await tripPlanModel.find(query).select('category');''
