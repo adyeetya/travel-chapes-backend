@@ -208,16 +208,49 @@ class userController {
     const validSchema = Joi.object({
       name: Joi.string().required(),
       email: Joi.string().required(),
-      query: Joi.string().required(),
+      destination: Joi.string().required(),
+      phone: Joi.string().required(),
+      travelers: Joi.string().required(),
+      query: Joi.string().allow('').optional(),
+      createdFrom: Joi.string().required(),
     })
     try {
       const { error, value } = await validSchema.validate(req.body);
       if (error) {
         throw apiError.badRequest(error.details[0].message);
       }
-      await sendEmailUserQuery("tiwarishiv7169@gmail.com", "User Query Request", value.email, value.name, value.query);
+      // Optionally, you can build a query string from the form fields for the 'query' field if needed
+      // await sendEmailUserQuery("tiwarishiv7169@gmail.com", "User Query Request", value.email, value.name, `Destination: ${value.destination}\nPhone: ${value.phone}\nTravelers: ${value.travelers}`);
       await createQuery(value);
       return res.json(new response({}, responseMessage.QUERY_SAVED))
+    } catch (error) {
+      next(error);
+    }
+  }
+  async getAllQueries(req, res, next) {
+    try {
+      
+      const queries = await userQueryServices.getQueries();
+      return res.json(new response(queries, responseMessage.DATA_FOUND));
+    } catch (error) {
+      next(error);
+    }
+  }
+  async updateQueryStatus(req, res, next) {
+    const validSchema = Joi.object({
+      _id: Joi.string().required(),
+      status: Joi.string().valid('pending', 'contacted', 'in_progress', 'converted', 'closed', 'spam').required(),
+    });
+    try {
+      const { error, value } = await validSchema.validate(req.body);
+      if (error) {
+        throw apiError.badRequest(error.details[0].message);
+      }
+      const updated = await userQueryServices.updateQueryStatus(value._id, value.status);
+      if (!updated) {
+        throw apiError.notFound('Query not found');
+      }
+      return res.json(new response(updated, 'Query status updated successfully'));
     } catch (error) {
       next(error);
     }
