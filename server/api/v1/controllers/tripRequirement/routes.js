@@ -2,8 +2,7 @@ import express from "express";
 import controller from "./controller";
 import auth from "../../../../helper/auth";
 // /api/v1/tripRequirement
-export default express
-  .Router()
+export default express.Router()
   .get("/viewTrip", controller.viewTrip)
   .use(auth.verifyToken)
   .get("/getTripList", controller.tripList)
