@@ -36,7 +36,7 @@ class tripPlansController {
     async createTripPlans(req, res, next) {
         const validSchema = Joi.object({
             slug: Joi.string().required(),
-
+            city: Joi.string().optional(),
             title: Joi.string().required(),
 
             route: Joi.string().required(),
@@ -78,6 +78,7 @@ class tripPlansController {
                     description: Joi.string().optional(),
                 })
             ).optional(),
+            status: Joi.string().valid(status.active, status.delete).optional(),
         });
 
         try {
@@ -102,9 +103,12 @@ class tripPlansController {
         }
     }
     async updateTripPlan(req, res, next) {
+
+
         const updateSchema = Joi.object({
             _id: Joi.string().required(),
             slug: Joi.string().required(),
+            city: Joi.string().optional(),
             name: Joi.string().optional(),
             title: Joi.string().optional(),
             city: Joi.string().required(),
@@ -124,35 +128,38 @@ class tripPlansController {
             description: Joi.string().optional(),
             fullItinerary: Joi.array().items(
                 Joi.object({
-                    day: Joi.string().optional(),
+                    day: Joi.string().required(),
                     title: Joi.string().optional(),
                     description: Joi.string().optional(),
                 })
             ).optional(),
             inclusions: Joi.array().items(
                 Joi.object({
-                    title: Joi.string().optional(),
+                    title: Joi.string().required(),
                     description: Joi.string().optional(),
                 })
             ).optional(),
             exclusions: Joi.array().items(
                 Joi.object({
-                    title: Joi.string().optional(),
+                    title: Joi.string().required(),
                     description: Joi.string().optional(),
                 })
             ).optional(),
             importantPoints: Joi.array().items(
                 Joi.object({
-                    title: Joi.string().optional(),
+                    title: Joi.string().required(),
                     description: Joi.string().optional(),
                 })
             ).optional(),
-            status: Joi.string().valid('active', 'delete').optional(),
+            status: Joi.string().valid(status.active, status.delete).optional(),
         });
 
         try {
+
             const { error, value } = updateSchema.validate(req.body);
+
             if (error) {
+
                 return next(apiError.badRequest(error.details[0].message));
             }
             const adminResult = await findAdmin({ _id: req.userId });

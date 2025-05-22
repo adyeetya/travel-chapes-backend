@@ -10,7 +10,7 @@ const { createHotel, findHotel, updateHotel, findHotelList, finHotelPopulate, ho
 import { vehicaleServices } from "../../services/vehicale";
 const { createVehicale, findVehicale, updateVehicale, findVehicaleList } = vehicaleServices;
 import { tripServices } from "../../services/trip";
-const { createTripDetails, findTrip, updateTrip, findTripList, findPopulateTrip, } = tripServices;
+const { createTripDetails, findTrip, findTrips, updateTrip, findTripList, findPopulateTrip, } = tripServices;
 
 class tripRequirementController {
   async createLocation(req, res, next) {
@@ -317,21 +317,25 @@ class tripRequirementController {
     }
   }
   async viewTrip(req, res, next) {
+    const validSchema = Joi.object({
+      _id: Joi.string().optional(),
+      slug: Joi.string().optional()
+    }).or('_id', 'slug'); // Requires at least one of _id or slug
 
     try {
-      // const { error, value } = await validSchema.validate(req.query);
-      // if (error) {
-      //   throw apiError.badRequest(error.details[0].message);
-      // }
-      const tripPlanId = req.query._id;
-      const tripSlug = req.query.slug;
-      const query = {};
-      if (tripPlanId) {
-        query._id = tripPlanId;
-      } else if (tripSlug) {
-        query.slug = tripSlug;
+      const { error, value } = await validSchema.validate(req.query);
+      if (error) {
+        throw apiError.badRequest(error.details[0].message);
       }
+      
+      const query = {
+        isDeleted: false, // Add this to ensure we only get non-deleted trips
+        ...(value._id ? { _id: value._id } : {}),
+        ...(value.slug ? { slug: value.slug } : {})
+      };
+
       const tripResult = await findTrip(query);
+      // console.log('trip result', tripResult) // Use findPopulateTrip instead of findTrip to get populated data
       if (!tripResult) {
         throw apiError.notFound(responseMessage.DATA_NOT_FOUND);
       }
@@ -340,6 +344,36 @@ class tripRequirementController {
       next(error);
     }
   }
+
+    async viewAllTrips(req, res, next) {
+    const validSchema = Joi.object({
+      _id: Joi.string().optional(),
+      slug: Joi.string().optional()
+    }).or('_id', 'slug'); // Requires at least one of _id or slug
+
+    try {
+      const { error, value } = await validSchema.validate(req.query);
+      if (error) {
+        throw apiError.badRequest(error.details[0].message);
+      }
+      
+      const query = {
+        isDeleted: false, // Add this to ensure we only get non-deleted trips
+        ...(value._id ? { _id: value._id } : {}),
+        ...(value.slug ? { slug: value.slug } : {})
+      };
+
+      const tripResult = await findTrips(query);
+      // console.log('trip result', tripResult) // Use findPopulateTrip instead of findTrip to get populated data
+      if (!tripResult) {
+        throw apiError.notFound(responseMessage.DATA_NOT_FOUND);
+      }
+      return res.json(new response(tripResult, responseMessage.DATA_FOUND));
+    } catch (error) {
+      next(error);
+    }
+  }
+
   async updateTrip(req, res, next) {
     const validSchema = Joi.object({
       _id: Joi.string().required(),
