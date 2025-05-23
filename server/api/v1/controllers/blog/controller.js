@@ -11,8 +11,15 @@ const { createBlog, findBlog, updateBlog, findBlogs } = blogServices;
 class blogController {
     async createBlog(req, res, next) {
         const validSchema = Joi.object({
+            title: Joi.string().optional(),
             text: Joi.string().optional(),
-            image: Joi.string().optional()
+            image: Joi.string().optional(),
+            location: Joi.string().optional(),
+            destinationLink: Joi.string().optional(),
+            author: Joi.string().optional(),
+            isActive: Joi.boolean().optional(),
+            isDelete: Joi.boolean().optional()
+
         })
         try {
             const { error, value } = validSchema.validate(req.body);
@@ -32,7 +39,8 @@ class blogController {
 
     async blogsList(req, res, next) {
         try {
-            const result = await findBlogs({ isDeleted: false });
+            const result = await findBlogs({ isDelete: false });
+            // console.log("result", result);
             if (!result || result.length == 0) {
                 throw apiError.notFound(responseMessage.DATA_NOT_FOUND);
             };

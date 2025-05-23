@@ -7,9 +7,11 @@ const blogServices = {
         return await blogModel.findOne(query);
     },
     updateBlog: async (query, updatedObj) => {
-        return await blogModel.update(query, updatedObj, { new: true });
+        return await blogModel.updateOne(query, updatedObj, { new: true });
     },
     findBlogs: async (query) => {
+        
+        
         return await blogModel.find(query);
     }
 }
