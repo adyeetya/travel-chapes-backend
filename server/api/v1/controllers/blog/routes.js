@@ -6,5 +6,4 @@ export default express.Router()
     .get("/viewBlog", controller.findBlog)
     .use(auth.verifyToken)
     .post("/createBlog", controller.createBlog)
-
     .put("/updateBlog", controller.updateBlog)

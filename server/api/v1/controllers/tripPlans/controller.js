@@ -18,6 +18,7 @@ class tripPlansController {
         const validSchema = Joi.object({
             page: Joi.number().optional(),
             limit: Joi.number().optional(),
+            search: Joi.string().optional()
         })
         try {
             const { error, value } = validSchema.validate(req.body)
