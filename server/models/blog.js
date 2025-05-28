@@ -9,15 +9,14 @@ const blogSchema = new mongoose.Schema({
     image: {
         type: String
     },
-    location:{
-        type:String
+    location: {
+        type: String
     },
-    destinationLink:{
-        type:String
+    destinationLink: {
+        type: String
     },
-
     author: {
-        type:String
+        type: String
     },
     isActive: {
         type: Boolean,
@@ -27,7 +26,6 @@ const blogSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     }
-
 }, { timestamps: true, collection: "blog" });
 
 module.exports = mongoose.model("blog", blogSchema);

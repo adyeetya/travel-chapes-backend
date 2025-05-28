@@ -11,7 +11,7 @@ const tripPlanServices = {
     updateTripPlans: async (query, updatedObj) => {
         return await tripPlanModel.updateOne(query, updatedObj, { new: true });
     },
-    getTripPlans: async(query)=>{
+    getTripPlans: async (query) => {
         return await tripPlanModel.find(query).select('fullItinerary');
     },
     // findAlltripPlans: async (validateBody) => {
@@ -43,8 +43,8 @@ const tripPlanServices = {
 
     findAlltripPlans: async (validateBody) => {
         let query = { status: { $eq: status.active } }
-        let { category, startDate, endDate } = validateBody;
-        
+        let { category, startDate, endDate, search } = validateBody;
+
         if (category) {
             query.category = { $in: [category] };
         }
@@ -57,10 +57,20 @@ const tripPlanServices = {
                 query.createdAt.$lte = new Date(endDate);
             }
         }
-        
+        if (search) {
+            query.$or = [
+                {
+                    city: {
+                        $regex: search,
+                        $options: 'i'
+                    }
+                }
+            ];
+        }
+
         // Get all documents sorted by createdAt in descending order
         const docs = await tripPlanModel.find(query).sort({ createdAt: -1 });
-        
+
         // Return in same structure as pagination but with all data
         return {
             docs,
@@ -75,8 +85,8 @@ const tripPlanServices = {
             nextPage: null
         };
     },
-    getTripPlanCategories: async(query)=>{
-        return await tripPlanModel.find(query).select('category');''
+    getTripPlanCategories: async (query) => {
+        return await tripPlanModel.find(query).select('category'); ''
     }
 }
 
