@@ -6,6 +6,8 @@ export default express.Router()
     // /api/v1/customer
     .use(auth.verifyToken)
     .post("/createCustomer", controller.createCustomer)
+    .post('/invoices/generate', controller.generateInvoice)
+    .get('/invoices/:customerId', controller.getCustomerInvoices)
     .post("/addPayment", controller.addPayment)
     .get("/getCustomerList", controller.getcustomerList)
     .put("/updateCustomer", controller.updateCustomer)
