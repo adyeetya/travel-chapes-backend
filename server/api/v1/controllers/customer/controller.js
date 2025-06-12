@@ -240,8 +240,8 @@ class customerController {
                 .text("Travel Chapes", 160, 45) // Positioned above GSTIN
                 .fillColor("#ffffff") // Switch to white for GSTIN and address
                 .fontSize(10)
-                .text("GSTIN: 09XXXXXX1Z2", 160, 65)
-                .text("2nd Floor, Sector 62, Noida 201301", 160, 80)
+                .text("GSTIN: 09AAVFT4318F1ZR", 160, 65)
+                .text("18/4, Gulmohar road, Dental Solutions, Indirapuram, Ghaziabad, Uttar Pradesh, 201014", 160, 80)
                 .fillColor("#000000") // Reset color for rest of document
                 .font('Helvetica') // Reset to regular font
                 .moveDown();
@@ -258,7 +258,7 @@ class customerController {
 
             // 3) Bill To section with light background
             doc.fillColor("#f8f9fa")
-                .rect(40, doc.y, doc.page.width - 80, 100)
+                .rect(40, doc.y, doc.page.width - 80, 120)
                 .fill()
                 .fillColor("#000000")
                 .fontSize(12)
@@ -336,8 +336,8 @@ class customerController {
                 .fontSize(8)
                 .text("Thank you for your business!", { align: "center" })
                 .text("For any queries, please contact:", { align: "center" })
-                .text("Phone: +91 9876543210 | Email: info@travelchapes.com | Website: www.travelchapes.com", { align: "center" })
-                .text("Registered Office: 2nd Floor, Sector 62, Noida 201301, Uttar Pradesh, India", { align: "center" });
+                .text("Phone: +91 8650584095 | Email: contact@travelchapes.com | Website: www.travelchapes.com", { align: "center" })
+                .text("18/4, Gulmohar road, Dental Solutions, Indirapuram, Ghaziabad, Uttar Pradesh, 201014", { align: "center" });
 
             doc.end();
 
