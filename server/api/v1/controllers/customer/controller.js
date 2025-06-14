@@ -167,7 +167,23 @@ class customerController {
 
             const customer = await findCustomer({ _id: customerId });
             if (!customer) return res.status(404).send("Customer not found");
-            const formattedDate = new Date(invoiceDate || new Date()).toLocaleDateString('en-IN');
+            // Parse invoiceDate to Date object for DB, fallback to now if invalid
+            let invoiceDateObj;
+            if (invoiceDate) {
+                // Accepts ISO, YYYY-MM-DD, or DD/MM/YYYY
+                if (/^\d{4}-\d{2}-\d{2}/.test(invoiceDate)) {
+                    invoiceDateObj = new Date(invoiceDate);
+                } else if (/^\d{2}\/\d{2}\/\d{4}/.test(invoiceDate)) {
+                    const [day, month, year] = invoiceDate.split('/').map(Number);
+                    invoiceDateObj = new Date(year, month - 1, day);
+                } else {
+                    invoiceDateObj = new Date(invoiceDate);
+                }
+                if (isNaN(invoiceDateObj.getTime())) invoiceDateObj = new Date();
+            } else {
+                invoiceDateObj = new Date();
+            }
+            const formattedDate = invoiceDateObj.toLocaleDateString('en-IN');
             const adminResult = await findAdmin({ _id: req.userId });
             if (!adminResult) {
                 throw apiError.notAllowed(responseMessage.ADMIN_NOT_FOUND);
@@ -181,7 +197,7 @@ class customerController {
 
             const invoiceData = {
                 customer: customerId,
-                invoiceDate: formattedDate,
+                invoiceDate: invoiceDateObj, // Store as Date object
                 invoiceNumber: `INV-${Date.now()}`,
                 agreedPrice: totalPrice, // Now storing total price for all people
                 cgst: cgstPrice,
